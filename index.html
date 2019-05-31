@@ -130,6 +130,12 @@ slide:not(.current) .plotly.html-widget{
           </hgroup>
   </slide>
 
+<style type="text/css">
+article {
+  font-size: 28pt;
+}
+</style>
+
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>What are R Packages?</h2></hgroup><article  id="what-are-r-packages">
 
 </article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  class="build" id="r-packages">
@@ -146,8 +152,6 @@ slide:not(.current) .plotly.html-widget{
 </article></slide><slide class=""><hgroup><h2>The resource with All the information</h2></hgroup><article  id="the-resource-with-all-the-information">
 
 <p><a href='https://cran.r-project.org/doc/manuals/r-release/R-exts.html' title=''>https://cran.r-project.org/doc/manuals/r-release/R-exts.html</a></p>
-
-<p><img src="figure/writing_r_extensions.png" width="100%" /></p>
 
 </article></slide><slide class=""><hgroup><h2>What’s in a Name?</h2></hgroup><article  id="whats-in-a-name">
 
@@ -242,18 +246,18 @@ install.packages(&quot;usethis&quot;)</pre>
 </article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  id="description-additional-fields">
 
 <ul>
-<li>Imports: package1, package2
+<li><strong>Imports:</strong> package1, package2
 
 <ul>
 <li>packages with functions we need <strong>in code</strong></li>
 </ul></li>
-<li>Depends: package3, package5
+<li><strong>Depends:</strong> package3, package5
 
 <ul>
-<li>packages with <strong>ALL</strong> functions loaded from package, but <strong>loaded in user library</strong> before your package</li>
+<li><strong>ALL</strong> functions loaded from package, but <strong>loaded in user library</strong> before your package</li>
 <li>Similar to <code>library(package3); library(yourpackage)</code> - not recommended</li>
 </ul></li>
-<li>Suggests: package4, package6
+<li><strong>Suggests:</strong> package4, package6
 
 <ul>
 <li>used in <strong>examples</strong> or <strong>vignettes</strong></li>
@@ -267,6 +271,77 @@ install.packages(&quot;usethis&quot;)</pre>
 <pre >Depends: R (&gt;= 3.5.3)</pre>
 
 <p>This is not great because anyone with a lower <code>R</code> version (like <code>3.4</code>) cannot install your package. Unless you need the newest <code>R</code> functionality, delete this line.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Additional Changes to DESCRIPTION</h2></hgroup><article  id="additional-changes-to-description">
+
+</article></slide><slide class=""><hgroup><h2>Authors</h2></hgroup><article  id="authors">
+
+<p>I add this to the <code>DESCRIPTION</code> file:</p>
+
+<pre >Authors@R: person(given = &quot;John&quot;,
+           family = &quot;Muschelli&quot;,
+           role = c(&quot;aut&quot;, &quot;cre&quot;),
+           email = &quot;muschellij2@gmail.com&quot;,
+           comment = c(ORCID = &quot;0000-0001-6469-1750&quot;))</pre>
+
+</article></slide><slide class=""><hgroup><h2>Authors</h2></hgroup><article  id="authors-1">
+
+<p>I use <code>Authors@R</code> even if there is only one author because of the <a href='https://github.com/r-lib/desc/issues/44' title=''><code>desc</code> package issue</a> and that package is relied upon for site building and stuff later.</p>
+
+<div class="container">
+
+<div id="left_col">
+<p>Roles, see <code>?person</code></p>
+
+<ul>
+<li><code>cre</code> - creator/maintainer, can only have one</li>
+<li><code>aut</code> = author, can have multiple</li>
+</ul></div>
+
+<div id="right_col">
+
+<img src="figure/highlander.gif" style="width:120%; margin: auto;" alt="flow">
+
+<div>
+
+
+</article></slide><slide class=""><hgroup><h2>Maintainer</h2></hgroup><article  id="maintainer">
+
+<p>If you use <code>Authors@R</code>, you should be able to remove the Maintainer field, but I don’t. I am explicit about <code>Maintainer</code> because some people use that field as some parsers use <code>Author</code> and not <code>Authors@R</code>.</p>
+
+<pre >Maintainer: John Muschelli &lt;muschellij2@gmail.com&gt;</pre>
+
+</article></slide><slide class=""><hgroup><h2>License</h2></hgroup><article  id="license">
+
+<p>I use <code>License: GPL-3</code> or <code>GPL-2</code>.</p>
+
+<ul>
+<li>For GPL-3:</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>usethis::use_gpl3_license()</pre>
+
+<p><a href='https://www.r-project.org/Licenses/' title=''>https://www.r-project.org/Licenses/</a></p>
+
+<p><a href='https://kbroman.org/pkg_primer/pages/licenses.html' title=''>https://kbroman.org/pkg_primer/pages/licenses.html</a></p>
+
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Package Title</h2></hgroup><article  id="description-package-title">
+
+<p>Change the <code>Title</code> so that it’s Title Case and make sure to put single quotes around weird words (like science-specific).</p>
+
+<pre >Title: How to Analyze Data and Images</pre>
+
+<ul>
+<li>do <strong>not</strong> start with R package or Package</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Description</h2></hgroup><article  id="description-description">
+
+<p>Change the <code>Description</code> so that it’s a sentence (prose) and it ends with a period. Also I keep putting single quotes around weird words (like science-specific). Make sure to put links in angle brackets (<code>&lt;http...&gt;</code>). Use DOIs if you can (<code>&lt;doi...&gt;</code>). If you go too long on a line, indent it with 4 spaces &ldquo;<code></code>&rdquo; and go to the next.</p>
+
+<ul>
+<li>Look at some of favorite package descriptions</li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Roxygen2</h2></hgroup><article  id="roxygen2">
 
@@ -296,11 +371,11 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <pre class = 'prettyprint lang-r'>top = function(x, n) {</pre>
 
-<p>Go to Code -&gt; Insert Roxygen Skeleton</p>
+<p>Go to <code>Code -&gt; Insert Roxygen Skeleton</code></p>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton">
+</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton">
 
-<p>Output (what makes a help file):</p>
+<p>Roxygen header (what turns into a help file):</p>
 
 <pre >#&#39; Title
 #&#39;
@@ -312,7 +387,7 @@ install.packages(&quot;usethis&quot;)</pre>
 #&#39;
 #&#39; @examples</pre>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton-1">
+</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton-1">
 
 <ul>
 <li><code>@param</code> stands for a parameter/argument for that function.<br/></li>
@@ -345,12 +420,20 @@ install.packages(&quot;usethis&quot;)</pre>
 #&#39;    top(mat, n = 10)
 #&#39; }</pre>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton-3">
+</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton-3">
 
 <p>Instead of <code>Title</code>, you can use separate <code>@title</code> and <code>@description</code> tags if you want them to be different. For example:</p>
 
 <pre >#&#39; @title Print the top of a matrix
 #&#39; @description \code{top} is a small function to not just present the first rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Roxygen and Markdown</h2></hgroup><article  id="roxygen-and-markdown">
+
+<p>If you want to use <code>markdown</code> with <code>roxygen2</code>, then you can use</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_roxygen_md()</pre>
+
+<p>so instead of <code>\code{top}</code> you can write <code>`top`</code> from the previous slide.</p>
 
 </article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace">
 
@@ -379,7 +462,7 @@ install.packages(&quot;usethis&quot;)</pre>
 </ul></li>
 </ul>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>You do not have <code>library()</code> functionsin R package code</h2></hgroup><article  id="you-do-not-have-library-functionsin-r-package-code">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>You do not have <code>library()</code> functions in R package code</h2></hgroup><article  id="you-do-not-have-library-functions-in-r-package-code">
 
 </article></slide><slide class=""><hgroup><h2>Check</h2></hgroup><article  id="check">
 
@@ -392,7 +475,7 @@ install.packages(&quot;usethis&quot;)</pre>
      importFrom(&quot;graphics&quot;, &quot;hist&quot;)
    to your NAMESPACE file.</pre>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>The Goal is to have Errors/Warnings/Noteson R CMD Check</h2></hgroup><article  id="the-goal-is-to-have-errorswarningsnoteson-r-cmd-check">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>The Goal is to have NO Errors/Warnings/Notes on R CMD Check</h2></hgroup><article  id="the-goal-is-to-have-no-errorswarningsnotes-on-r-cmd-check">
 
 </article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace-3">
 
@@ -426,14 +509,13 @@ install.packages(&quot;usethis&quot;)</pre>
 </article></slide><slide class=""><hgroup><h2>Build and Reload Again</h2></hgroup><article  id="build-and-reload-again">
 
 <ul>
-<li>Go to Build -&gt; Build and Reload the package
+<li>Go to <code>Build → Build and Reload</code> the package
 
 <ul>
 <li>First time you may see some warnings (no NAMESPACE file!)</li>
-<li>Rerunning should get rid of these</li>
-<li>look in the folders</li>
+<li>Rerunning may get rid of these</li>
 </ul></li>
-<li>Then try Build -&gt; Check Package</li>
+<li>Then try <code>Build → Check Package</code></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Troubleshooting</h2></hgroup><article  id="troubleshooting">
@@ -449,77 +531,83 @@ install.packages(&quot;usethis&quot;)</pre>
 </ul></li>
 </ul>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Changes to DESCRIPTION</h2></hgroup><article  id="changes-to-description">
-
-</article></slide><slide class=""><hgroup><h2>Authors</h2></hgroup><article  id="authors">
-
-<p>I add this to the <code>DESCRIPTION</code> file:</p>
-
-<pre >Authors@R: person(given = &quot;John&quot;,
-           family = &quot;Muschelli&quot;,
-           role = c(&quot;aut&quot;, &quot;cre&quot;),
-           email = &quot;muschellij2@gmail.com&quot;,
-           comment = c(ORCID = &quot;0000-0001-6469-1750&quot;))</pre>
-
-</article></slide><slide class=""><hgroup><h2>Authors</h2></hgroup><article  id="authors-1">
-
-<p>I use <code>Authors@R</code> even if there is only one author because of the <a href='https://github.com/r-lib/desc/issues/44' title=''><code>desc</code> package issue</a> and that package is relied upon for site building and stuff later.</p>
-
-<p>Roles, see <code>?person</code> - <code>cre</code> = creator/maintainer, can only have one - <code>aut</code> = author, can have multiple</p>
-
-</article></slide><slide class=""><hgroup><h2>Maintainer</h2></hgroup><article  id="maintainer">
-
-<p>If you use <code>Authors@R</code>, you should be able to remove the Maintainer field, but I don’t. I am explicit about <code>Maintainer</code> because some people use that field as some parsers use <code>Author</code> and not <code>Authors@R</code>.</p>
-
-<pre >Maintainer: John Muschelli &lt;muschellij2@gmail.com&gt;</pre>
-
-</article></slide><slide class=""><hgroup><h2>License</h2></hgroup><article  id="license">
-
-<p>I use <code>License: GPL-3</code> or <code>GPL-2</code>.</p>
-
-<ul>
-<li>For GPL-3:</li>
-</ul>
-
-<pre class = 'prettyprint lang-r'>usethis::use_gpl3_license()</pre>
-
-<p><a href='https://www.r-project.org/Licenses/' title=''>https://www.r-project.org/Licenses/</a></p>
-
-<p><a href='https://kbroman.org/pkg_primer/pages/licenses.html' title=''>https://kbroman.org/pkg_primer/pages/licenses.html</a></p>
-
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Package Title</h2></hgroup><article  id="description-package-title">
-
-<p>Change the <code>Title</code> so that it’s Title Case and make sure to put single quotes around weird words (like science-specific).</p>
-
-<pre >Title: How to Analyze Data and Images</pre>
-
-<ul>
-<li>do not start with R package or Package</li>
-</ul>
-
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Description</h2></hgroup><article  id="description-description">
-
-<p>Change the <code>Description</code> so that it’s a sentence (prose) and it ends with a period. Also I keep putting single quotes around weird words (like science-specific). Make sure to put links in angle brackets (<code>&lt;http...&gt;</code>). Use DOIs if you can (<code>&lt;doi...&gt;</code>). If you go too long on a line, indent it with 4 spaces &ldquo;<code></code>&rdquo; and go to the next.</p>
-
-<ul>
-<li>Look at some of favorite package descriptions</li>
-</ul>
-
 </article></slide><slide class=""><hgroup><h2>Including Data</h2></hgroup><article  id="including-data">
 
 <ul>
 <li>Data should be small, but good for running examples or vignettes.</li>
 </ul>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Building CI and README</h2></hgroup><article  id="building-ci-and-readme">
+<p>Run <code>use_data_raw()</code> if you have code to generate data (R data):</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_data_raw()</pre>
+
+</article></slide><slide class=""><hgroup><h2>Including Data</h2></hgroup><article  id="including-data-1">
+
+<p>Let’s say you want to make a data set <code>mydata_set</code>:</p>
+
+<p>At the end of the script, run</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_data(mydata_set, compress = &quot;xz&quot;)</pre>
+
+<p>And this will make a <code>data/mydata_set.rda</code> file.</p>
+
+</article></slide><slide class=""><hgroup><h2>Including Non-R data</h2></hgroup><article  id="including-non-r-data">
+
+<p>If you want to include other types of data (such as images) put them into the <code>inst/</code> folder (or a subfolder of <code>inst</code>). You can access them using <code>system.file</code> when installed.</p>
+
+<p>For example, if you have a file <code>inst/extdata/myimage.nii.gz</code>:</p>
+
+<pre class = 'prettyprint lang-r'>system.file(&quot;extdata&quot;, &quot;myimage.nii.gz&quot;, package = &quot;PACKAGENAME&quot;)</pre>
+
+<p>will return the filename for you to access it in code, where <code>PACKAGENAME</code> is your package name.</p>
+
+</article></slide><slide class=""><hgroup><h2>Unit Tests</h2></hgroup><article  id="unit-tests">
+
+<p>Unit testing packages: <code>testthat</code> and <code>RUnit</code>.</p>
+
+<p>To use <code>testthat</code>, run <code>usethis::use_testthat()</code>. All test files must be in <code>testthat/tests/</code> and must start with the word <code>test</code>.</p>
+
+<pre class = 'prettyprint lang-r'>testthat::test_that(&quot;Description of test&quot;, { 
+# code for test
+testthat::expect_equal(r, 3.5523334)
+testthat::expect_true(x)
+testthat::expect_is(my_df, &quot;data.frame&quot;)
+})</pre>
+
+</article></slide><slide class=""><hgroup><h2>Creating Vignettes</h2></hgroup><article  id="creating-vignettes">
+
+<pre class = 'prettyprint lang-r'>usethis::use_vignette(&quot;my-vignette&quot;)</pre>
+
+<p><code>title</code> is on the document, <code>VignetteIndexEntry</code> is on the website:</p>
+
+<pre >---
+title: &quot;my-vignette&quot;
+output: rmarkdown::html_vignette
+vignette: &gt;
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---</pre>
+
+</article></slide><slide class=""><hgroup><h2>Creating a README</h2></hgroup><article  id="creating-a-readme">
+
+<pre class = 'prettyprint lang-r'>usethis::use_readme_rmd()</pre>
+
+<p>This will create a <code>README.Rmd</code> file for your GitHub/Package.</p>
+
+</article></slide><slide class=""><hgroup><h2>Creating NEWS.md</h2></hgroup><article  id="creating-news.md">
+
+<pre class = 'prettyprint lang-r'>usethis::use_news_md()</pre>
+
+<p>This will create a <code>NEWS.md</code> file to update with new versions of the package, discussing changes.</p>
+
+</article></slide><slide class=""><hgroup><h2>Building CI and README</h2></hgroup><article  id="building-ci-and-readme">
 
 <p>I run the short version of the code on <a href='http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html' title=''>http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html</a>, which essentially to run (in R):</p>
 
 <pre class = 'prettyprint lang-r'>usethis::use_git()
 usethis::use_github() # must have GITHUB_PAT set up
-usethis::use_readme_md()
-usethis::use_vignette(&quot;my-vignette&quot;)
-usethis::use_testthat()
+usethis::use_readme_rmd()
 usethis::use_appveyor()
 usethis::use_travis()</pre>
 

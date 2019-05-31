@@ -15,9 +15,21 @@ subtitle: https://github.com/muschellij2/smi_2019
 bibliography: refs.bib    
 ---
 
+<style type="text/css">
+article {
+  font-size: 28pt;
+}
+</style>
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
+
+
+```{r, eval = TRUE, echo = FALSE}
+pkg_name = "usethis"
+```
+
 
 # What are R Packages?
 
@@ -111,14 +123,14 @@ Type `DESCRIPTION` and open that file.
 
 ---
 
-```{r, out.width="100%", echo = FALSE}
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
 knitr::include_graphics("r_packages_figures/DESCRIPTION.png")
 ```
 
 
 ---
 
-```{r, out.width="100%", echo = FALSE}
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
 knitr::include_graphics("r_packages_figures/DESCRIPTION_overlay.png")
 ```
 
@@ -136,12 +148,12 @@ BSD_2_clause BSD_3_clause MIT
 
 ## DESCRIPTION: additional fields
 
-- Imports: package1, package2
+- **Imports:** package1, package2
   - packages with functions we need **in code**
-- Depends: package3, package5
-  - packages with **ALL** functions loaded from package, but **loaded in user library** before your package
+- **Depends:** package3, package5
+  - **ALL** functions loaded from package, but **loaded in user library** before your package
   - Similar to `library(package3); library(yourpackage)` - not recommended
-- Suggests: package4, package6
+- **Suggests:** package4, package6
   - used in **examples** or **vignettes**
 
 ## DESCRIPTION: not so fun default
@@ -153,6 +165,74 @@ Depends: R (>= 3.5.3)
 ```
 
 This is not great because anyone with a lower `R` version (like `3.4`) cannot install your package.  Unless you need the newest `R` functionality, delete this line.
+
+# Additional Changes to DESCRIPTION
+
+## Authors
+
+I add this to the `DESCRIPTION` file:
+```
+Authors@R: person(given = "John",
+           family = "Muschelli",
+           role = c("aut", "cre"),
+           email = "muschellij2@gmail.com",
+           comment = c(ORCID = "0000-0001-6469-1750"))
+```
+
+## Authors
+
+I use `Authors@R` even if there is only one author because of the [`desc` package issue](https://github.com/r-lib/desc/issues/44) and that package is relied upon for site building and stuff later.
+
+<div class="container"> 
+<div id="left_col"> 
+Roles, see `?person`
+
+- `cre` - creator/maintainer, can only have one
+- `aut` = author, can have multiple
+</div>
+<div id="right_col"> 
+<img src="figure/highlander.gif" style="width:120%; margin: auto;" alt="flow"> 
+<div>
+
+## Maintainer
+
+If you use `Authors@R`, you should be able to remove the Maintainer field, but 
+I don't.  I am explicit about `Maintainer` because some people use that field as some parsers use `Author` and not `Authors@R`.
+
+```
+Maintainer: John Muschelli <muschellij2@gmail.com>
+```
+
+## License
+
+I use `License: GPL-3` or `GPL-2`.
+
+- For GPL-3:
+```r
+`r pkg_name`::use_gpl3_license()
+```
+
+https://www.r-project.org/Licenses/
+
+https://kbroman.org/pkg_primer/pages/licenses.html
+
+## DESCRIPTION: Package Title
+
+Change the `Title` so that it's Title Case and make sure to put single quotes around weird words (like science-specific).  
+
+```
+Title: How to Analyze Data and Images
+```
+
+- do **not** start with R package or Package
+
+
+## DESCRIPTION: Description
+
+Change the `Description` so that it's a sentence (prose) and it ends with a period.  Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
+
+- Look at some of favorite package descriptions
+
 
 ## Roxygen2
 
@@ -189,11 +269,12 @@ Highlight the following code:
 top = function(x, n) {
 ```
 
-Go to Code -> Insert Roxygen Skeleton
+Go to `Code -> Insert Roxygen Skeleton`
 
-## Roxygen Skeleton:
+## Roxygen Skeleton
 
-Output (what makes a help file):
+Roxygen header (what turns into a help file):
+
 ```
 #' Title
 #'
@@ -206,7 +287,7 @@ Output (what makes a help file):
 #' @examples
 ```
 
-## Roxygen Skeleton:
+## Roxygen Skeleton
 
 - `@param` stands for a parameter/argument for that function.  
 - `@return` denotes what the function returns.  This is required.  
@@ -234,7 +315,7 @@ Output (what makes a help file):
 #' }
 ```
 
-## Roxygen Skeleton:
+## Roxygen Skeleton
 
 Instead of `Title`, you can use separate `@title` and `@description` tags if you want them to be different.  For example:
 
@@ -243,19 +324,28 @@ Instead of `Title`, you can use separate `@title` and `@description` tags if you
 #' @description \code{top} is a small function to not just present the first rows
 ```
 
+## Roxygen and Markdown
+
+If you want to use `markdown` with `roxygen2`, then you can use 
+
+```{r, eval = FALSE}
+usethis::use_roxygen_md()
+```
+
+so instead of `\code{top}` you can write `` `top` `` from the previous slide.
+
 ## NAMESPACE
 
 
-```{r, out.width="100%", echo = FALSE}
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
 knitr::include_graphics("r_packages_figures/NAMESPACE.png")
 ```
 
 ## NAMESPACE
 
-```{r, out.width="100%", echo = FALSE}
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
 knitr::include_graphics("r_packages_figures/NAMESPACE_overlay.png")
 ```
-
 
 ## NAMESPACE
 
@@ -268,7 +358,7 @@ In Roxygen:
    - if package is listed under Depends in DESCRIPTION, then the **whole package** is loaded when you load your package
    - otherwise it simply exposes them for your package to use them, but not the user, users still have to do `library(PACKAGENAME)`
    
-# You do not have `library()` functions\n in R package code
+# You do not have `library()` functions in R package code
 
 ## Check
 
@@ -283,11 +373,7 @@ Go to `Build → Check Package`.  You should see something like:
    to your NAMESPACE file.
 ```
 
-```{r, eval = TRUE, echo = FALSE}
-pkg_name = "usethis"
-```
-
-# The Goal is to have \nNO Errors/Warnings/Notes\n on R CMD Check
+# The Goal is to have NO Errors/Warnings/Notes on R CMD Check
 
 ## NAMESPACE
 
@@ -313,11 +399,10 @@ Add `@importFrom graphics hist` to your `top.R` file
 
 ## Build and Reload Again
 
-- Go to Build -> Build and Reload the package
+- Go to `Build → Build and Reload`  the package
     - First time you may see some warnings (no NAMESPACE file!)
-    - Rerunning should get rid of these
-    - look in the folders
-- Then try Build -> Check Package
+    - Rerunning may get rid of these
+- Then try `Build → Check Package`
 
 ## Troubleshooting
 
@@ -328,85 +413,96 @@ In case things are not working or seem off
    - `roxygen2` will create the documentation automatically
 
 
-# Changes to DESCRIPTION
-
-## Authors
-
-I add this to the `DESCRIPTION` file:
-```
-Authors@R: person(given = "John",
-           family = "Muschelli",
-           role = c("aut", "cre"),
-           email = "muschellij2@gmail.com",
-           comment = c(ORCID = "0000-0001-6469-1750"))
-```
-
-## Authors
-
-I use `Authors@R` even if there is only one author because of the [`desc` package issue](https://github.com/r-lib/desc/issues/44) and that package is relied upon for site building and stuff later.
-
-Roles, see `?person`
-- `cre` = creator/maintainer, can only have one
-- `aut` = author, can have multiple
-
-
-
-## Maintainer
-
-If you use `Authors@R`, you should be able to remove the Maintainer field, but 
-I don't.  I am explicit about `Maintainer` because some people use that field as some parsers use `Author` and not `Authors@R`.
-
-```
-Maintainer: John Muschelli <muschellij2@gmail.com>
-```
-## License
-
-I use `License: GPL-3` or `GPL-2`.
-
-- For GPL-3:
-```r
-`r pkg_name`::use_gpl3_license()
-```
-
-https://www.r-project.org/Licenses/
-
-https://kbroman.org/pkg_primer/pages/licenses.html
-
-## DESCRIPTION: Package Title
-
-Change the `Title` so that it's Title Case and make sure to put single quotes around weird words (like science-specific).  
-
-```
-Title: How to Analyze Data and Images
-```
-
-- do not start with R package or Package
-
-
-
-## DESCRIPTION: Description
-
-Change the `Description` so that it's a sentence (prose) and it ends with a period.  Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
-
-- Look at some of favorite package descriptions
-
-
-
 ## Including Data
 
 - Data should be small, but good for running examples or vignettes.
 
+Run `use_data_raw()` if you have code to generate data (R data):
+
+```{r}
+usethis::use_data_raw()
+```
+
+## Including Data
+
+Let's say you want to make a data set `mydata_set`:
+
+At the end of the script, run
+```{r}
+usethis::use_data(mydata_set, compress = "xz")
+```
+
+And this will make a `data/mydata_set.rda` file.
+
+## Including Non-R data
+
+If you want to include other types of data (such as images) put them into the `inst/` folder (or a subfolder of `inst`).  You can access them using `system.file` when installed.
+
+For example, if you have a file `inst/extdata/myimage.nii.gz`:
+
+```{r}
+system.file("extdata", "myimage.nii.gz", package = "PACKAGENAME")
+```
+
+will return the filename for you to access it in code, where `PACKAGENAME` is your package name.
+
+## Unit Tests
+
+Unit testing packages: `testthat` and `RUnit`.
+
+To use `testthat`, run `usethis::use_testthat()`.  All test files must be in `testthat/tests/` and must start with the word `test`.
+
+```r
+testthat::test_that("Description of test", { 
+# code for test
+testthat::expect_equal(r, 3.5523334)
+testthat::expect_true(x)
+testthat::expect_is(my_df, "data.frame")
+})
+```
+
+## Creating Vignettes
+
+```r
+`r pkg_name`::use_vignette("my-vignette")
+```
+
+`title` is on the document, `VignetteIndexEntry` is on the website:
+```
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```
+
+## Creating a README
+
+```r
+`r pkg_name`::use_readme_rmd()
+```
+
+This will create a `README.Rmd` file for your GitHub/Package.
+
+## Creating NEWS.md
+
+```r
+`r pkg_name`::use_news_md()
+```
+
+This will create a `NEWS.md` file to update with new versions of the package, discussing changes.
 
 
-# Building CI and README
+## Building CI and README
 
 I run the short version of the code on http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html, which essentially to run (in R):
 ```r
 `r pkg_name`::use_git()
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
-`r pkg_name`::use_readme_md()
-`r pkg_name`::use_vignette("my-vignette")
-`r pkg_name`::use_testthat()
+`r pkg_name`::use_readme_rmd()
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
 ```
