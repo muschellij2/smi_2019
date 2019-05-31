@@ -759,6 +759,8 @@ usethis::use_travis()</pre>
 
 <p>If you get <code>No visible binding for global variable</code>, you’re likely using Non-Standard Evaluation (NSE) or tidy evaluation</p>
 
+</article></slide><slide class=""><hgroup><h2>No visible binding for global variable issue</h2></hgroup><article  id="no-visible-binding-for-global-variable-issue-1">
+
 <p>2 options, follow different approaches:</p>
 
 <ol>
@@ -769,7 +771,32 @@ usethis::use_travis()</pre>
 <pre class = 'prettyprint lang-r'>col5 = NULL # set to something
 rm(list = &quot;col5&quot;) # remove it </pre>
 
-<p>This will remove it but not be a &ldquo;global&rdquo; fix. Also, make sure <code>col5</code> is <strong>not</strong> an argument in your function</p></article></slide>
+<p>This will remove it but not be a &ldquo;global&rdquo; fix. Also, make sure <code>col5</code> is <strong>not</strong> an argument in your function</p>
+
+</article></slide><slide class=""><hgroup><h2>Skipping tests on CRAN/CI</h2></hgroup><article  id="skipping-tests-on-cranci">
+
+<ul>
+<li>Use <code>testthat::skip_on_cran()</code> for skipping CRAN tests</li>
+<li><code>testthat::skip_on_travis()</code> and <code>testthat::skip_on_appveyor()</code> for CI</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Making a Logo/Hex Sticker</h2></hgroup><article  id="making-a-logohex-sticker">
+
+<p>Install the <a href='https://github.com/GuangchuangYu/hexSticker' title=''><code>hexSticker</code> package</a></p>
+
+<pre class = 'prettyprint lang-r'>library(hexSticker)
+library(desc)
+desc = desc::description$new()
+fig_dir = file.path(&quot;man&quot;, &quot;figures&quot;)
+if (dir.exists(fig_dir)) {
+  dir.create(fig_dir, recursive = TRUE)
+}
+package = desc$get(&quot;Package&quot;)
+hexSticker::sticker(
+  package = package,
+  # add code here
+  filename = file.path(fig_dir, &quot;sticker.png&quot;))
+usethis::use_logo(file.path(fig_dir, &quot;sticker.png&quot;))</pre></article></slide>
 
 
   <slide class="backdrop"></slide>

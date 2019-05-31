@@ -650,6 +650,8 @@ to `appveyor.yml` to make sure warnings are treated as errors.
 
 If you get `No visible binding for global variable`, you're likely using Non-Standard Evaluation (NSE) or tidy evaluation
 
+## No visible binding for global variable issue
+
 2 options, follow different approaches:
 
 1. [Use globalVariables](https://stackoverflow.com/a/12429344)
@@ -662,8 +664,27 @@ rm(list = "col5") # remove it
 
 This will remove it but not be a "global" fix.  Also, make sure `col5` is **not** an argument in your function
 
+## Skipping tests on CRAN/CI
 
+- Use `testthat::skip_on_cran()` for skipping CRAN tests
+- `testthat::skip_on_travis()` and `testthat::skip_on_appveyor()` for CI
 
+## Making a Logo/Hex Sticker
 
+Install the [`hexSticker` package](https://github.com/GuangchuangYu/hexSticker)
 
-
+```{r}
+library(hexSticker)
+library(desc)
+desc = desc::description$new()
+fig_dir = file.path("man", "figures")
+if (dir.exists(fig_dir)) {
+  dir.create(fig_dir, recursive = TRUE)
+}
+package = desc$get("Package")
+hexSticker::sticker(
+  package = package,
+  # add code here
+  filename = file.path(fig_dir, "sticker.png"))
+usethis::use_logo(file.path(fig_dir, "sticker.png"))
+```
