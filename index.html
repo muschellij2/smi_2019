@@ -217,6 +217,8 @@ install.packages(&quot;usethis&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>DESCRIPTION file</h2></hgroup><article  id="description-file">
 
+<p><img src="r_packages_figures/goto.png" width="100%" /></p>
+
 <p>In the RStudio project, go to &ldquo;Go to file/function&rdquo; search bar on the menu bar. Also <code>Ctrl + .</code> on Mac.</p>
 
 <ul>
@@ -237,14 +239,26 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p><img src="r_packages_figures/DESCRIPTION_overlay.png" width="100%" /></p>
 
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION</h2></hgroup><article  id="description">
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Package Title</h2></hgroup><article  id="description-package-title">
+
+<p>Change the <code>Title</code> so that it’s Title Case and make sure to put single quotes around weird words (like science-specific).</p>
+
+<pre class = 'prettyprint lang-yaml'>Title: How to Analyze Data and Images</pre>
 
 <ul>
-<li>&quot;Title - What the Package Does (Title Case)</li>
-<li>&ldquo;Author: YOURNAME&rdquo;</li>
-<li>&ldquo;Maintainer: YOURNAME <code>&lt;</code><a href='mailto:your@email.com' title=''>your@email.com</a><code>&gt;</code>&rdquo;</li>
-<li>&ldquo;Description: Use paragraph prose here. Don’t start with word package&rdquo; Use four spaces when indenting paragraphs within the Description.</li>
-<li>&ldquo;License:&rdquo;, one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0 BSD_2_clause BSD_3_clause MIT</li>
+<li>do <strong>not</strong> start with R package or Package</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Description</h2></hgroup><article  id="description-description">
+
+<p>Change the <code>Description</code> so that it’s a sentence (prose) and it ends with a period.</p>
+
+<p>Also I keep putting single quotes around weird words (like science-specific). Make sure to put links in angle brackets (<code>&lt;http...&gt;</code>).</p>
+
+<p>Use DOIs if you can (<code>&lt;doi...&gt;</code>). If you go too long on a line, indent it with 4 spaces &ldquo;<code></code>&rdquo; and go to the next.</p>
+
+<ul>
+<li>Look at some of favorite package descriptions</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  id="description-additional-fields" class="build">
@@ -272,11 +286,9 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>This is not great because anyone with a lower <code>R</code> version (like <code>3.4</code>) cannot install your package. Unless you need the newest <code>R</code> functionality, delete this line.</p>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Additional Changes to DESCRIPTION</h2></hgroup><article  id="additional-changes-to-description">
-
 </article></slide><slide class=""><hgroup><h2>Authors</h2></hgroup><article  id="authors">
 
-<p>I add this to the <code>DESCRIPTION</code> file:</p>
+<p>I add this to the <code>DESCRIPTION</code> file (and remove <code>Author:</code> field):</p>
 
 <pre class = 'prettyprint lang-yaml'>Authors@R: person(given = &quot;John&quot;,
            family = &quot;Muschelli&quot;,
@@ -325,27 +337,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p><a href='https://kbroman.org/pkg_primer/pages/licenses.html' title=''>https://kbroman.org/pkg_primer/pages/licenses.html</a></p>
 
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Package Title</h2></hgroup><article  id="description-package-title">
-
-<p>Change the <code>Title</code> so that it’s Title Case and make sure to put single quotes around weird words (like science-specific).</p>
-
-<pre class = 'prettyprint lang-yaml'>Title: How to Analyze Data and Images</pre>
-
-<ul>
-<li>do <strong>not</strong> start with R package or Package</li>
-</ul>
-
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: Description</h2></hgroup><article  id="description-description">
-
-<p>Change the <code>Description</code> so that it’s a sentence (prose) and it ends with a period.</p>
-
-<p>Also I keep putting single quotes around weird words (like science-specific). Make sure to put links in angle brackets (<code>&lt;http...&gt;</code>).</p>
-
-<p>Use DOIs if you can (<code>&lt;doi...&gt;</code>). If you go too long on a line, indent it with 4 spaces &ldquo;<code></code>&rdquo; and go to the next.</p>
-
-<ul>
-<li>Look at some of favorite package descriptions</li>
-</ul>
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Documenting Your Package</h2></hgroup><article  id="documenting-your-package">
 
 </article></slide><slide class=""><hgroup><h2>Roxygen2</h2></hgroup><article  id="roxygen2">
 
@@ -371,7 +363,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <pre class = 'prettyprint lang-r'>usethis::use_package(&quot;dplyr&quot;, type = &quot;Depends&quot;)</pre>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen2</h2></hgroup><article  id="roxygen2-1">
+</article></slide><slide class=""><hgroup><h2>Creating a roxygen header</h2></hgroup><article  id="creating-a-roxygen-header">
 
 <p>Highlight the following code:</p>
 
@@ -379,7 +371,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>Go to <code>Code -&gt; Insert Roxygen Skeleton</code></p>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton">
+</article></slide><slide class=""><hgroup><h2>Roxygen header</h2></hgroup><article  id="roxygen-header">
 
 <p>Roxygen header (what turns into a help file):</p>
 
@@ -393,14 +385,14 @@ install.packages(&quot;usethis&quot;)</pre>
 #&#39;
 #&#39; @examples</pre>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton-1">
+</article></slide><slide class=""><hgroup><h2>Roxygen tags</h2></hgroup><article  id="roxygen-tags">
 
 <ul>
 <li><code>@param</code> stands for a parameter/argument for that function.<br/></li>
 <li><code>@return</code> denotes what the function returns. This is required.</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton-2">
+</article></slide><slide class=""><hgroup><h2>Roxygen tags</h2></hgroup><article  id="roxygen-tags-1">
 
 <ul>
 <li><code>@export</code> - when people install your package, can they use this function
@@ -415,7 +407,7 @@ install.packages(&quot;usethis&quot;)</pre>
 </ul></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton:</h2></hgroup><article  id="roxygen-skeleton-3">
+</article></slide><slide class=""><hgroup><h2>Full roxygen header</h2></hgroup><article  id="full-roxygen-header">
 
 <pre >#&#39; Print the top of a matrix
 #&#39; @param x a \code{matrix}
@@ -431,7 +423,7 @@ install.packages(&quot;usethis&quot;)</pre>
 #&#39;    top(mat, n = 10)
 #&#39; }</pre>
 
-</article></slide><slide class=""><hgroup><h2>Roxygen Skeleton</h2></hgroup><article  id="roxygen-skeleton-4">
+</article></slide><slide class=""><hgroup><h2>Roxygen header: title/description unique</h2></hgroup><article  id="roxygen-header-titledescription-unique">
 
 <p>Instead of <code>Title</code>, you can use separate <code>@title</code> and <code>@description</code> tags if you want them to be different. For example:</p>
 
@@ -454,7 +446,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p><img src="r_packages_figures/NAMESPACE_overlay.png" width="100%" /></p>
 
-</article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace-2" class="build">
+</article></slide><slide class=""><hgroup><h2>Building the NAMESPACE with roxygen</h2></hgroup><article  id="building-the-namespace-with-roxygen">
 
 <p>In Roxygen:</p>
 
@@ -466,7 +458,7 @@ install.packages(&quot;usethis&quot;)</pre>
 </ul></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>NAMESPACE</h2></hgroup><article  id="namespace-3" class="build">
+</article></slide><slide class=""><hgroup><h2>Building the NAMESPACE with roxygen</h2></hgroup><article  id="building-the-namespace-with-roxygen-1">
 
 <p>In Roxygen:</p>
 
@@ -779,6 +771,12 @@ rm(list = &quot;col5&quot;) # remove it </pre>
 <li>Use <code>testthat::skip_on_cran()</code> for skipping CRAN tests</li>
 <li><code>testthat::skip_on_travis()</code> and <code>testthat::skip_on_appveyor()</code> for CI</li>
 </ul>
+
+</article></slide><slide class=""><hgroup><h2>You Want the Pipe but not <code>dplyr</code></h2></hgroup><article  id="you-want-the-pipe-but-not-dplyr">
+
+<p>Run</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_pipe()</pre>
 
 </article></slide><slide class=""><hgroup><h2>Making a Logo/Hex Sticker</h2></hgroup><article  id="making-a-logohex-sticker">
 

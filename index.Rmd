@@ -116,6 +116,10 @@ install.packages("roxygen2")
 
 ## DESCRIPTION file
 
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
+knitr::include_graphics("r_packages_figures/goto.png")
+```
+
 In the RStudio project, go to "Go to file/function" search bar on the menu bar. Also `Ctrl + .` on Mac.
     
 - This searches through the files in the package.
@@ -136,16 +140,26 @@ knitr::include_graphics("r_packages_figures/DESCRIPTION.png")
 knitr::include_graphics("r_packages_figures/DESCRIPTION_overlay.png")
 ```
 
+## DESCRIPTION: Package Title
 
-## DESCRIPTION 
+Change the `Title` so that it's Title Case and make sure to put single quotes around weird words (like science-specific).  
 
-- "Title - What the Package Does (Title Case)
-- "Author: YOURNAME"
-- "Maintainer: YOURNAME `<`your@email.com`>`"
-- "Description: Use paragraph prose here.  Don't start with word package"
-    Use four spaces when indenting paragraphs within the Description.
-- "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
-BSD_2_clause BSD_3_clause MIT
+```yaml
+Title: How to Analyze Data and Images
+```
+
+- do **not** start with R package or Package
+
+
+## DESCRIPTION: Description
+
+Change the `Description` so that it's a sentence (prose) and it ends with a period.  
+
+Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  
+
+Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
+
+- Look at some of favorite package descriptions
 
 
 ## DESCRIPTION: additional fields {.build}
@@ -167,11 +181,9 @@ Depends: R (>= 3.5.3)
 
 This is not great because anyone with a lower `R` version (like `3.4`) cannot install your package.  Unless you need the newest `R` functionality, delete this line.
 
-# Additional Changes to DESCRIPTION
-
 ## Authors
 
-I add this to the `DESCRIPTION` file:
+I add this to the `DESCRIPTION` file (and remove `Author:` field):
 ```yaml
 Authors@R: person(given = "John",
            family = "Muschelli",
@@ -217,27 +229,7 @@ https://www.r-project.org/Licenses/
 
 https://kbroman.org/pkg_primer/pages/licenses.html
 
-## DESCRIPTION: Package Title
-
-Change the `Title` so that it's Title Case and make sure to put single quotes around weird words (like science-specific).  
-
-```yaml
-Title: How to Analyze Data and Images
-```
-
-- do **not** start with R package or Package
-
-
-## DESCRIPTION: Description
-
-Change the `Description` so that it's a sentence (prose) and it ends with a period.  
-
-Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  
-
-Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
-
-- Look at some of favorite package descriptions
-
+# Documenting Your Package
 
 ## Roxygen2
 
@@ -269,7 +261,7 @@ but what if you did this instead?  (Function masking)
 usethis::use_package("dplyr", type = "Depends")
 ```
 
-## Roxygen2
+## Creating a roxygen header
 
 Highlight the following code:
 ```{r eval = FALSE}
@@ -278,7 +270,7 @@ top = function(x, n) {
 
 Go to `Code -> Insert Roxygen Skeleton`
 
-## Roxygen Skeleton
+## Roxygen header
 
 Roxygen header (what turns into a help file):
 
@@ -294,12 +286,12 @@ Roxygen header (what turns into a help file):
 #' @examples
 ```
 
-## Roxygen Skeleton 
+## Roxygen tags
 
 - `@param` stands for a parameter/argument for that function.  
 - `@return` denotes what the function returns.  This is required.  
 
-## Roxygen Skeleton 
+## Roxygen tags 
 
 - `@export` - when people install your package, can they use this function
     - non-exported functions are usually helpers, really small, or not fully formed yet
@@ -307,7 +299,7 @@ Roxygen header (what turns into a help file):
       - make sure `\dontrun{}` not `\dontrun {}` (spaces fail)
 
 
-## Roxygen Skeleton:
+## Full roxygen header
 
 ```
 #' Print the top of a matrix
@@ -325,7 +317,7 @@ Roxygen header (what turns into a help file):
 #' }
 ```
 
-## Roxygen Skeleton
+## Roxygen header: title/description unique
 
 Instead of `Title`, you can use separate `@title` and `@description` tags if you want them to be different.  For example:
 
@@ -344,6 +336,7 @@ usethis::use_roxygen_md()
 
 so instead of `\code{top}` you can write `` `top` `` from the previous slide.
 
+
 ## NAMESPACE
 
 
@@ -357,14 +350,14 @@ knitr::include_graphics("r_packages_figures/NAMESPACE.png")
 knitr::include_graphics("r_packages_figures/NAMESPACE_overlay.png")
 ```
 
-## NAMESPACE {.build}
+## Building the NAMESPACE with roxygen
 
 In Roxygen:
 
 - `@export` - adds this to the NAMESPACE file
    - when package is installed, users can call this function
    
-## NAMESPACE {.build}   
+## Building the NAMESPACE with roxygen
 
 In Roxygen:
 
@@ -668,6 +661,13 @@ This will remove it but not be a "global" fix.  Also, make sure `col5` is **not*
 
 - Use `testthat::skip_on_cran()` for skipping CRAN tests
 - `testthat::skip_on_travis()` and `testthat::skip_on_appveyor()` for CI
+
+## You Want the Pipe but not `dplyr`
+
+Run 
+```r
+usethis::use_pipe()
+```
 
 ## Making a Logo/Hex Sticker
 
