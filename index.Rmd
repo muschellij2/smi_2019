@@ -46,7 +46,7 @@ pkg_name = "usethis"
 
 https://cran.r-project.org/doc/manuals/r-release/R-exts.html
 
-```{r, out.width="100%", echo = FALSE}
+```{r, out.width="100%", echo = FALSE, eval = TRUE}
 knitr::include_graphics("figure/writing_r_extensions.png")
 ```
 
@@ -461,6 +461,17 @@ testthat::expect_is(my_df, "data.frame")
 })
 ```
 
+# Good Rule of Thumb: Any issue created/bug found gets a test Rule of Thumb:
+
+# If used in a paper, make sure tests check paper results
+
+## What to test
+
+- Object output type (list/data.frame)
+- Expected output value (3.233453)
+- Multiple inputs give expected output 
+- Even graphs: https://github.com/r-lib/vdiffr
+
 ## Creating Vignettes
 
 ```r
@@ -479,6 +490,9 @@ vignette: >
 ---
 ```
 
+# 95% of what you will be doing is now coverd.  Mostly it will be documenting and examples
+
+
 ## Creating a README
 
 ```r
@@ -487,38 +501,52 @@ vignette: >
 
 This will create a `README.Rmd` file for your GitHub/Package.
 
+- GitHub renders the README.
+- Instructions on how to use the package (examples)
+- Instructions on installing 3rd-party dependencies
+
+## Spell Checking
+
+Believe it or not, CRAN will check some spelling.
+
+```r
+devtools::spell_check()
+```
+
+after you have fixed the issues, run
+
+```r
+spelling::update_wordlist()
+```
+to make a WORDLIST file.  These are correctly spelled but likely jargon.
+
 ## Creating NEWS.md
 
 ```r
 `r pkg_name`::use_news_md()
 ```
 
-This will create a `NEWS.md` file to update with new versions of the package, discussing changes.
+This will create a `NEWS.md` file to update with new versions of the package, discussing changes (CRAN Requires).
 
+```
+package 0.2.0
+- Added function `get_data`
+- Fixed bug in `bad_function` (fixes issue #52).
+```
 
-## Building CI and README
+# Continuous Integration
 
-I run the short version of the code on http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html, which essentially to run (in R):
+## Continuous Integration: Testing on the Cloud
+
+- Travis tests Linux/OSX and Appveyor tests Windows
+- Integrate with GitHub, each push tested
+
 ```r
 `r pkg_name`::use_git()
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
-`r pkg_name`::use_readme_rmd()
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
 ```
-
-And edit the following files:
-
-## `.travis.yml`
-
-Add the following lines:
-```
-warnings_are_errors: true 
-after_success:
-  - Rscript -e 'covr::coveralls(type = "all")'
-```
-to `.travis.yml`.
-
 
 ## `appveyor.yml`
 
@@ -528,34 +556,58 @@ environment:
   global:
     WARNINGS_ARE_ERRORS: 1
 ```
-to `appveyor.yml`.
+to `appveyor.yml` to make sure warnings are treated as errors.
 
-## `README.md`
- 
-Add the following lines, changing `GITHUB_USERNAME/REPO` to the correct version
+## Code Coverage
+
+- Code coverage is the percentage of code (without whitespace) which is covered by automated tests.
+- Calculated using [`covr`](https://github.com/r-lib/covr) package.
+- I tend to check coverage by examples, vignettes **and** tests vs. just tests (default).
+- You can run `covr::package_coverage(type = "all")` locally.
+- Run `usethis::use_coverage()`, with either [`coveralls`](https://coveralls.io) or [`codecov`](https://codecov.io/).
+    - Add lines to `.travis.yml` if necessary
+
+## Just a starting point
+
+- A lot of additional things 
+- https://cran.r-project.org/doc/manuals/r-release/R-exts.html
+
+## Releasing to CRAN
+
+- Push all changes to GitHub.
+- `usethis::use_cran_comments()`
+- Try your package on [`rhub`](https://github.com/r-hub/rhub) with `devtools::check_rhub()`
+- Run on CRAN Windows build `devtools::check_win_devel()`
+- Run `devtools::release(check = TRUE)` and go through the steps
+- Validate the email from CRAN for submission.
+- Wait and pray
+
+# Extra Slides
+
+## Making a Website
+
+- `pkgdown` makes nice doc pages for your package
+- Run `usethis::use_pkgdown()`.  Then run `pkgdown::build_site()`.
+- Push everything to GitHub.
+- Go to GitHub repo → Settings → Scroll down to "GitHub Pages", set Source to `master branch /docs folder`
+- Refresh your webpage.
+
+
+## No visible binding for global variable issue
+
+If you get `No visible binding for global variable`, you're likely using Non-Standard Evaluation (NSE) or tidy evaluation
+
+2 options, follow different approaches:
+
+1. [Use globalVariables](https://stackoverflow.com/a/12429344)
+2. Let's say `col5` is the global variable.  At top of function write:
+
+```{r, eval = FALSE}
+col5 = NULL # set to something
+rm(list = "col5") # remove it 
 ```
- [![Travis-CI Build Status] (https://travis-ci.org/GITHUB_USERNAME/REPO.svg?branch=master)] (https://travis-ci.org/GITHUB_USERNAME/REPO)
- [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/GITHUB_USERNAME/REPO?branch=master&svg=true)](https://ci.appveyor.com/project/GITHUB_USERNAME/REPO)
-```
-to the `README.md`. 
 
-
-# Additional edits
-
-I tend to add to the `README.md` an installation script (using `remotes` or `devtools`) :
-
-````
-## Installation
-
-To install the package, please run:
-
-```r
-remotes::install_github("GITHUB_USERNAME/REPO")
-```
-````
-
-I grab my `Description` field from `DESCRIPTION` file and add `The package DESCRIPTION_FIELD_HERE` in `README.md`
-
+This will remove it but not be a "global" fix.  Also, make sure `col5` is **not** an argument in your function
 
 
 

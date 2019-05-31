@@ -153,6 +153,8 @@ article {
 
 <p><a href='https://cran.r-project.org/doc/manuals/r-release/R-exts.html' title=''>https://cran.r-project.org/doc/manuals/r-release/R-exts.html</a></p>
 
+<p><img src="figure/writing_r_extensions.png" width="100%" /></p>
+
 </article></slide><slide class=""><hgroup><h2>What’s in a Name?</h2></hgroup><article  id="whats-in-a-name">
 
 <p>Package Names:</p>
@@ -574,6 +576,19 @@ testthat::expect_true(x)
 testthat::expect_is(my_df, &quot;data.frame&quot;)
 })</pre>
 
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Good Rule of Thumb: Any issue created/bug found gets a test Rule of Thumb:</h2></hgroup><article  id="good-rule-of-thumb-any-issue-createdbug-found-gets-a-test-rule-of-thumb">
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>If used in a paper, make sure tests check paper results</h2></hgroup><article  id="if-used-in-a-paper-make-sure-tests-check-paper-results">
+
+</article></slide><slide class=""><hgroup><h2>What to test</h2></hgroup><article  id="what-to-test">
+
+<ul>
+<li>Object output type (list/data.frame)</li>
+<li>Expected output value (3.233453)</li>
+<li>Multiple inputs give expected output</li>
+<li>Even graphs: <a href='https://github.com/r-lib/vdiffr' title=''>https://github.com/r-lib/vdiffr</a></li>
+</ul>
+
 </article></slide><slide class=""><hgroup><h2>Creating Vignettes</h2></hgroup><article  id="creating-vignettes">
 
 <pre class = 'prettyprint lang-r'>usethis::use_vignette(&quot;my-vignette&quot;)</pre>
@@ -589,39 +604,55 @@ vignette: &gt;
   %\VignetteEncoding{UTF-8}
 ---</pre>
 
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>95% of what you will be doing is now coverd. Mostly it will be documenting and examples</h2></hgroup><article  id="of-what-you-will-be-doing-is-now-coverd.-mostly-it-will-be-documenting-and-examples">
+
 </article></slide><slide class=""><hgroup><h2>Creating a README</h2></hgroup><article  id="creating-a-readme">
 
 <pre class = 'prettyprint lang-r'>usethis::use_readme_rmd()</pre>
 
 <p>This will create a <code>README.Rmd</code> file for your GitHub/Package.</p>
 
+<ul>
+<li>GitHub renders the README.</li>
+<li>Instructions on how to use the package (examples)</li>
+<li>Instructions on installing 3rd-party dependencies</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Spell Checking</h2></hgroup><article  id="spell-checking">
+
+<p>Believe it or not, CRAN will check some spelling.</p>
+
+<pre class = 'prettyprint lang-r'>devtools::spell_check()</pre>
+
+<p>after you have fixed the issues, run</p>
+
+<pre class = 'prettyprint lang-r'>spelling::update_wordlist()</pre>
+
+<p>to make a WORDLIST file. These are correctly spelled but likely jargon.</p>
+
 </article></slide><slide class=""><hgroup><h2>Creating NEWS.md</h2></hgroup><article  id="creating-news.md">
 
 <pre class = 'prettyprint lang-r'>usethis::use_news_md()</pre>
 
-<p>This will create a <code>NEWS.md</code> file to update with new versions of the package, discussing changes.</p>
+<p>This will create a <code>NEWS.md</code> file to update with new versions of the package, discussing changes (CRAN Requires).</p>
 
-</article></slide><slide class=""><hgroup><h2>Building CI and README</h2></hgroup><article  id="building-ci-and-readme">
+<pre >package 0.2.0
+- Added function `get_data`
+- Fixed bug in `bad_function` (fixes issue #52).</pre>
 
-<p>I run the short version of the code on <a href='http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html' title=''>http://johnmuschelli.com/neuroc/getting_ready_for_submission/index.html</a>, which essentially to run (in R):</p>
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Continuous Integration</h2></hgroup><article  id="continuous-integration">
+
+</article></slide><slide class=""><hgroup><h2>Continuous Integration: Testing on the Cloud</h2></hgroup><article  id="continuous-integration-testing-on-the-cloud">
+
+<ul>
+<li>Travis tests Linux/OSX and Appveyor tests Windows</li>
+<li>Integrate with GitHub, each push tested</li>
+</ul>
 
 <pre class = 'prettyprint lang-r'>usethis::use_git()
 usethis::use_github() # must have GITHUB_PAT set up
-usethis::use_readme_rmd()
 usethis::use_appveyor()
 usethis::use_travis()</pre>
-
-<p>And edit the following files:</p>
-
-</article></slide><slide class=""><hgroup><h2><code>.travis.yml</code></h2></hgroup><article  id="travis.yml">
-
-<p>Add the following lines:</p>
-
-<pre >warnings_are_errors: true 
-after_success:
-  - Rscript -e &#39;covr::coveralls(type = &quot;all&quot;)&#39;</pre>
-
-<p>to <code>.travis.yml</code>.</p>
 
 </article></slide><slide class=""><hgroup><h2><code>appveyor.yml</code></h2></hgroup><article  id="appveyor.yml">
 
@@ -631,30 +662,68 @@ after_success:
   global:
     WARNINGS_ARE_ERRORS: 1</pre>
 
-<p>to <code>appveyor.yml</code>.</p>
+<p>to <code>appveyor.yml</code> to make sure warnings are treated as errors.</p>
 
-</article></slide><slide class=""><hgroup><h2><code>README.md</code></h2></hgroup><article  id="readme.md">
+</article></slide><slide class=""><hgroup><h2>Code Coverage</h2></hgroup><article  id="code-coverage">
 
-<p>Add the following lines, changing <code>GITHUB_USERNAME/REPO</code> to the correct version</p>
+<ul>
+<li>Code coverage is the percentage of code (without whitespace) which is covered by automated tests.</li>
+<li>Calculated using <a href='https://github.com/r-lib/covr' title=''><code>covr</code></a> package.</li>
+<li>I tend to check coverage by examples, vignettes <strong>and</strong> tests vs. just tests (default).</li>
+<li>You can run <code>covr::package_coverage(type = &quot;all&quot;)</code> locally.</li>
+<li>Run <code>usethis::use_coverage()</code>, with either <a href='https://coveralls.io' title=''><code>coveralls</code></a> or <a href='https://codecov.io/' title=''><code>codecov</code></a>.
 
-<pre > [![Travis-CI Build Status] (https://travis-ci.org/GITHUB_USERNAME/REPO.svg?branch=master)] (https://travis-ci.org/GITHUB_USERNAME/REPO)
- [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/GITHUB_USERNAME/REPO?branch=master&amp;svg=true)](https://ci.appveyor.com/project/GITHUB_USERNAME/REPO)</pre>
+<ul>
+<li>Add lines to <code>.travis.yml</code> if necessary</li>
+</ul></li>
+</ul>
 
-<p>to the <code>README.md</code>.</p>
+</article></slide><slide class=""><hgroup><h2>Just a starting point</h2></hgroup><article  id="just-a-starting-point">
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Additional edits</h2></hgroup><article  id="additional-edits">
+<ul>
+<li>A lot of additional things</li>
+<li><a href='https://cran.r-project.org/doc/manuals/r-release/R-exts.html' title=''>https://cran.r-project.org/doc/manuals/r-release/R-exts.html</a></li>
+</ul>
 
-<p>I tend to add to the <code>README.md</code> an installation script (using <code>remotes</code> or <code>devtools</code>) :</p>
+</article></slide><slide class=""><hgroup><h2>Releasing to CRAN</h2></hgroup><article  id="releasing-to-cran">
 
-<pre >## Installation
+<ul>
+<li>Push all changes to GitHub.</li>
+<li><code>usethis::use_cran_comments()</code></li>
+<li>Try your package on <a href='https://github.com/r-hub/rhub' title=''><code>rhub</code></a> with <code>devtools::check_rhub()</code></li>
+<li>Run on CRAN Windows build <code>devtools::check_win_devel()</code></li>
+<li>Run <code>devtools::release(check = TRUE)</code> and go through the steps</li>
+<li>Validate the email from CRAN for submission.</li>
+<li>Wait and pray</li>
+</ul>
 
-To install the package, please run:
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Extra Slides</h2></hgroup><article  id="extra-slides">
 
-```r
-remotes::install_github(&quot;GITHUB_USERNAME/REPO&quot;)
-```</pre>
+</article></slide><slide class=""><hgroup><h2>Making a Website</h2></hgroup><article  id="making-a-website">
 
-<p>I grab my <code>Description</code> field from <code>DESCRIPTION</code> file and add <code>The package DESCRIPTION_FIELD_HERE</code> in <code>README.md</code></p></article></slide>
+<ul>
+<li><code>pkgdown</code> makes nice doc pages for your package</li>
+<li>Run <code>usethis::use_pkgdown()</code>. Then run <code>pkgdown::build_site()</code>.</li>
+<li>Push everything to GitHub.</li>
+<li>Go to GitHub repo → Settings → Scroll down to &ldquo;GitHub Pages&rdquo;, set Source to <code>master branch /docs folder</code></li>
+<li>Refresh your webpage.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>No visible binding for global variable issue</h2></hgroup><article  id="no-visible-binding-for-global-variable-issue">
+
+<p>If you get <code>No visible binding for global variable</code>, you’re likely using Non-Standard Evaluation (NSE) or tidy evaluation</p>
+
+<p>2 options, follow different approaches:</p>
+
+<ol>
+<li><a href='https://stackoverflow.com/a/12429344' title=''>Use globalVariables</a></li>
+<li>Let’s say <code>col5</code> is the global variable. At top of function write:</li>
+</ol>
+
+<pre class = 'prettyprint lang-r'>col5 = NULL # set to something
+rm(list = &quot;col5&quot;) # remove it </pre>
+
+<p>This will remove it but not be a &ldquo;global&rdquo; fix. Also, make sure <code>col5</code> is <strong>not</strong> an argument in your function</p></article></slide>
 
 
   <slide class="backdrop"></slide>
