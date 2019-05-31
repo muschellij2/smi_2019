@@ -1,6 +1,6 @@
 ---
 title: "Building R Packages"
-author: "John Muschelli http://johnmuschelli.com/smi_2019"
+author: "John Muschelli, slides at http://johnmuschelli.com/smi_2019"
 logo: bloomberg.logo.small.horizontal.blue.png
 output:
   ioslides_presentation:
@@ -11,7 +11,7 @@ output:
     self_contained: no
     widescreen: yes
   beamer_presentation: default
-subtitle: https://github.com/muschellij2/smi_2019
+subtitle: "source at https://github.com/muschellij2/smi_2019"
 bibliography: refs.bib    
 ---
 
@@ -59,6 +59,8 @@ Package Names:
 - periods allowable or use CamelCase
 - can have numbers
 - should be Google-able
+
+## What's in a Name?
 
 If you have a package name in mind before you start, use the `available` package:
 
@@ -139,28 +141,27 @@ knitr::include_graphics("r_packages_figures/DESCRIPTION_overlay.png")
 
 - "Title - What the Package Does (Title Case)
 - "Author: YOURNAME"
-- "Maintainer: YOURNAME <your@email.com>"
+- "Maintainer: YOURNAME `<`your@email.com`>`"
 - "Description: Use paragraph prose here.  Don't start with word package"
     Use four spaces when indenting paragraphs within the Description.
 - "License: ", one of GPL-2 GPL-3 LGPL-2 LGPL-2.1 LGPL-3 AGPL-3 Artistic-2.0
 BSD_2_clause BSD_3_clause MIT
 
 
-## DESCRIPTION: additional fields
+## DESCRIPTION: additional fields {.build}
 
 - **Imports:** package1, package2
   - packages with functions we need **in code**
 - **Depends:** package3, package5
   - **ALL** functions loaded from package, but **loaded in user library** before your package
   - Similar to `library(package3); library(yourpackage)` - not recommended
-- **Suggests:** package4, package6
-  - used in **examples** or **vignettes**
+- **Suggests:** package4, package6: used in **examples** or **vignettes**
 
 ## DESCRIPTION: not so fun default
 
 In the RStudio build, it may add something like:
 
-```
+```{r, engine="bash", eval = FALSE}
 Depends: R (>= 3.5.3)
 ```
 
@@ -171,7 +172,7 @@ This is not great because anyone with a lower `R` version (like `3.4`) cannot in
 ## Authors
 
 I add this to the `DESCRIPTION` file:
-```
+```yaml
 Authors@R: person(given = "John",
            family = "Muschelli",
            role = c("aut", "cre"),
@@ -220,7 +221,7 @@ https://kbroman.org/pkg_primer/pages/licenses.html
 
 Change the `Title` so that it's Title Case and make sure to put single quotes around weird words (like science-specific).  
 
-```
+```yaml
 Title: How to Analyze Data and Images
 ```
 
@@ -229,7 +230,11 @@ Title: How to Analyze Data and Images
 
 ## DESCRIPTION: Description
 
-Change the `Description` so that it's a sentence (prose) and it ends with a period.  Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
+Change the `Description` so that it's a sentence (prose) and it ends with a period.  
+
+Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  
+
+Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
 
 - Look at some of favorite package descriptions
 
@@ -247,6 +252,8 @@ top = function(x, n) {
 ```
 
 Save this to `top.R` file in `R/` (where R functions are).  Delete `hello.R` file if present.
+
+# Function names should likely be verbs
 
 ## Adding a package to DESCRIPTION field
 
@@ -287,10 +294,13 @@ Roxygen header (what turns into a help file):
 #' @examples
 ```
 
-## Roxygen Skeleton
+## Roxygen Skeleton 
 
 - `@param` stands for a parameter/argument for that function.  
 - `@return` denotes what the function returns.  This is required.  
+
+## Roxygen Skeleton 
+
 - `@export` - when people install your package, can they use this function
     - non-exported functions are usually helpers, really small, or not fully formed yet
     - `@examples` - code to show how the function works.  Wrap functions in `\dontrun{}` if not wanted to run and `\donttest{}` for not testing
@@ -347,14 +357,18 @@ knitr::include_graphics("r_packages_figures/NAMESPACE.png")
 knitr::include_graphics("r_packages_figures/NAMESPACE_overlay.png")
 ```
 
-## NAMESPACE
+## NAMESPACE {.build}
 
 In Roxygen:
 
 - `@export` - adds this to the NAMESPACE file
    - when package is installed, users can call this function
-- `@import` - in roxygen, if you want to import a **package**, you say `@import PACKAGENAME`
-   - imports **ALL** functions from that package
+   
+## NAMESPACE {.build}   
+
+In Roxygen:
+
+- `@import` - imports **ALL** functions from that package
    - if package is listed under Depends in DESCRIPTION, then the **whole package** is loaded when you load your package
    - otherwise it simply exposes them for your package to use them, but not the user, users still have to do `library(PACKAGENAME)`
    
@@ -375,16 +389,29 @@ Go to `Build → Check Package`.  You should see something like:
 
 # The Goal is to have NO Errors/Warnings/Notes on R CMD Check
 
-## NAMESPACE
+## Why the Message?
 
-- `@importFrom` - in roxygen, if you want to import a **function**, you say `@import PACKAGENAME func1 func2`
-   - only imports these functions.  Better way of doing things.
+R sees `hist` from `graphics`, but we never told it we needed it
+
+You *should* import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`). Don't import `base`.
+
+
+## Importing Packages or Functions from Packages
+
+- `@importFrom` - if you want to import a **function**, you say `@import PACKAGENAME func1 func2`
+   - only imports these functions (preferred to `@import`)
    - if `pkgA` has function `A` and `pkgB` has functions `A` and `B`, if `@import pkgA A`,  `@import pkgB B`, then if you call `A()`, R knows it's from `pkgA`
-   - you must import anything explicitly other than from the `base` package, includying anything from `stats` (e.g. `quantile`) or `graphics` (e.g. `hist`)
+   - But should use `pkgA::A()` in practice
 
-Add `@importFrom graphics hist` to your `top.R` file
 
-## NAMESPACE
+## Fixing the Message
+
+Add `@importFrom graphics hist` to your `top.R` file (anywhere in the header)
+
+- RStudio: `Build → Check Package` again
+
+
+## Importing Package Functions
 
 - You only have to import a whole package or a package function, don't mix and match
 - You only have to import a function in **one** file.
@@ -394,12 +421,11 @@ Add `@importFrom graphics hist` to your `top.R` file
 ```r
 `r pkg_name`::use_package("graphics")
 ```
-- Good practice is to import all packages, including base `R` packages (e.g. `graphics`, `stats`) when needed.  Don't import `base`.
 
 
 ## Build and Reload Again
 
-- Go to `Build → Build and Reload`  the package
+- RStudio: Go to `Build → Build and Reload`  the package
     - First time you may see some warnings (no NAMESPACE file!)
     - Rerunning may get rid of these
 - Then try `Build → Check Package`
@@ -408,10 +434,13 @@ Add `@importFrom graphics hist` to your `top.R` file
 
 In case things are not working or seem off 
  
-- Delete the `NAMESPACE` file.  If building fails, add an empty file with `# Generated by roxygen2: do not edit by hand` at the top and rerun.
+- Delete the `NAMESPACE` file.  If building fails, add an empty file with 
+```
+# Generated by roxygen2: do not edit by hand
+```
+at the top and rerun.
 - Delete the `man` folder 
    - `roxygen2` will create the documentation automatically
-
 
 ## Including Data
 
@@ -423,28 +452,47 @@ Run `use_data_raw()` if you have code to generate data (R data):
 usethis::use_data_raw()
 ```
 
+This will create a `data-raw` folder.
+
 ## Including Data
 
 Let's say you want to make a data set `mydata_set`:
 
-At the end of the script, run
-```{r}
+Create `data-raw/mydata_set.R` and at the end, run
+```{r, eval = FALSE}
 usethis::use_data(mydata_set, compress = "xz")
 ```
 
 And this will make a `data/mydata_set.rda` file.
 
+## Documenting Data
+
+- You don't export data.
+
+```
+#' My Awesome Data Set
+#'
+#' A more detailed description
+#'
+#' @format A `data.frame` with 2 columns elements, which are:
+#' \describe{
+#' \item{x1}{column of x variables}
+#' \item{y2}{column of yvariables}
+#' }
+"mydata_set"
+```
+
 ## Including Non-R data
 
-If you want to include other types of data (such as images) put them into the `inst/` folder (or a subfolder of `inst`).  You can access them using `system.file` when installed.
+If you want to include other types of data (such as images) put them into the `inst/` folder (or a subfolder of `inst`, I recommend `extdata`).  You can access them using `system.file` when installed.
 
 For example, if you have a file `inst/extdata/myimage.nii.gz`:
 
 ```{r}
-system.file("extdata", "myimage.nii.gz", package = "PACKAGENAME")
+system.file("extdata", "myimage.nii.gz", package = "YOUR_PACKAGE_NAME")
 ```
 
-will return the filename for you to access it in code, where `PACKAGENAME` is your package name.
+will return the filename for you to access it in code.
 
 ## Unit Tests
 
@@ -461,7 +509,7 @@ testthat::expect_is(my_df, "data.frame")
 })
 ```
 
-# Good Rule of Thumb: Any issue created/bug found gets a test Rule of Thumb:
+# Good Rule of Thumb: Any issue created/bug found gets a test
 
 # If used in a paper, make sure tests check paper results
 
@@ -490,7 +538,7 @@ vignette: >
 ---
 ```
 
-# 95% of what you will be doing is now coverd.  Mostly it will be documenting and examples
+# 95% of what you will be doing is now covered.  Mostly it will be documenting and examples
 
 
 ## Creating a README
@@ -564,13 +612,12 @@ to `appveyor.yml` to make sure warnings are treated as errors.
 - Calculated using [`covr`](https://github.com/r-lib/covr) package.
 - I tend to check coverage by examples, vignettes **and** tests vs. just tests (default).
 - You can run `covr::package_coverage(type = "all")` locally.
+
+## Code Coverage with Continuous Integration
+
 - Run `usethis::use_coverage()`, with either [`coveralls`](https://coveralls.io) or [`codecov`](https://codecov.io/).
     - Add lines to `.travis.yml` if necessary
 
-## Just a starting point
-
-- A lot of additional things 
-- https://cran.r-project.org/doc/manuals/r-release/R-exts.html
 
 ## Releasing to CRAN
 
@@ -580,7 +627,13 @@ to `appveyor.yml` to make sure warnings are treated as errors.
 - Run on CRAN Windows build `devtools::check_win_devel()`
 - Run `devtools::release(check = TRUE)` and go through the steps
 - Validate the email from CRAN for submission.
-- Wait and pray
+
+## This is just a starting point
+
+- A lot of additional things we can discuss individually
+- https://cran.r-project.org/doc/manuals/r-release/R-exts.html, though huge, should cover "everything"
+- Most of the work is documentation (80%) and vignettes and tests (20%)
+
 
 # Extra Slides
 

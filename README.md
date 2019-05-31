@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# smi\_2018
+# smi\_2019
 
 Slides for a presentation for the
-[SMI 2018](https://smi2018.netlify.com/) conference.
+[SMI 2019](https://sites.uci.edu/smi2019/) conference.
