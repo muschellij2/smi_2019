@@ -157,7 +157,7 @@ Change the `Description` so that it's a sentence (prose) and it ends with a peri
 
 Also I keep putting single quotes around weird words (like science-specific).  Make sure to put links in angle brackets (`<http...>`).  
 
-Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces "`    `" and go to the next.
+Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces and go to the next.
 
 - Look at some of favorite package descriptions
 
@@ -408,7 +408,7 @@ Add `@importFrom graphics hist` to your `top.R` file (anywhere in the header)
 
 - You only have to import a whole package or a package function, don't mix and match
 - You only have to import a function in **one** file.
-- For example, `@importFrom graphics hist` can go in any `.R` file.
+- e.g put `@importFrom graphics hist` in any `.R` file.
 
 - Any package you want to import, make sure you use `use_package`, so we'd use:
 ```r
