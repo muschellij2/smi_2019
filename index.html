@@ -49,7 +49,8 @@
       <script type="text/javascript"> 
         var params = []; 
         params["images"] = ["T1.nii.gz"]; 
-        </script>
+        </script>  
+  <script src="index_files/header-attrs-2.1/header-attrs.js"></script>
   <link href="index_files/ioslides-13.5.1/fonts/fonts.css" rel="stylesheet" />
   <link href="index_files/ioslides-13.5.1/theme/css/default.css" rel="stylesheet" />
   <link href="index_files/ioslides-13.5.1/theme/css/phone.css" rel="stylesheet" />
@@ -138,7 +139,7 @@ article {
 
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>What are R Packages?</h2></hgroup><article  id="what-are-r-packages">
 
-</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  id="r-packages" class="build">
+</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  class="build" id="r-packages">
 
 <ol class = 'build'>
 <li>Sets of Functions</li>
@@ -169,12 +170,23 @@ article {
 
 </article></slide><slide class=""><hgroup><h2>What’s in a Name?</h2></hgroup><article  id="whats-in-a-name-1">
 
-<p>If you have a package name in mind before you start, use the <code>available</code> package:</p>
+<p>Use <code>available</code> pkg to see if name taken:</p>
 
-<pre class = 'prettyprint lang-r'>install.packages(&quot;available&quot;)
-available::available(&quot;packageName&quot;)</pre>
+<pre class = 'prettyprint lang-r'>install.packages(&quot;available&quot;)</pre>
 
-<p>Checks CRAN/Bioconductor/GitHub for potentially similar package names.</p>
+<pre class = 'prettyprint lang-r'>available::available(&quot;enar&quot;, browse = FALSE) # if want &quot;enar&quot;</pre>
+
+<pre >── enar ─────────────────────────────────────────────────────────────────────────────────────────
+Name valid: ✔
+Available on CRAN: ✖ 
+Available on Bioconductor: ✔
+Available on GitHub:  ✖ 
+Abbreviations: http://www.abbreviations.com/enar
+Wikipedia: https://en.wikipedia.org/wiki/enar
+Wiktionary: https://en.wiktionary.org/wiki/enar
+Urban Dictionary:
+  Not found.
+Sentiment:???</pre>
 
 </article></slide><slide class=""><hgroup><h2>Starting Up</h2></hgroup><article  id="starting-up">
 
@@ -187,7 +199,7 @@ available::available(&quot;packageName&quot;)</pre>
 <pre class = 'prettyprint lang-r'>install.packages(&quot;devtools&quot;)
 install.packages(&quot;usethis&quot;)</pre>
 
-<p>In RStudio, File -&gt; New Project -&gt; New Directory -&gt; R Package using devtools (scroll down).</p>
+<p>In RStudio, File -&gt; New Project -&gt; New Directory -&gt; R Package using devtools (scroll down). Let’s call it <code>enar2020</code>.</p>
 
 </article></slide><slide class=""><hgroup><h2>Trying our first build</h2></hgroup><article  id="trying-our-first-build">
 
@@ -203,7 +215,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>Go to Build -&gt; Configure Build Tools</p>
 
-<p>Add <code>--as-cran</code> to &ldquo;Check Package&rdquo; (may not be necessary anymore)</p>
+<p>Can add options to &ldquo;Check Package&rdquo; (like <code>--as-cran</code>)</p>
 
 <p><img src="r_packages_figures/build_tools.png" style="width: 45%; display: block; margin: auto;"></p>
 
@@ -261,7 +273,7 @@ install.packages(&quot;usethis&quot;)</pre>
 <li>Look at some of favorite package descriptions</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  id="description-additional-fields" class="build">
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  class="build" id="description-additional-fields">
 
 <ul>
 <li><strong>Imports:</strong> package1, package2
@@ -273,7 +285,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <ul>
 <li><strong>ALL</strong> functions loaded from package, but <strong>loaded in user library</strong> before your package</li>
-<li>Similar to <code>library(package3); library(yourpackage)</code> - not recommended</li>
+<li>Similar to <code>library(package3); library(yourpackage)</code> - <em>not recommended</em></li>
 </ul></li>
 <li><strong>Suggests:</strong> package4, package6: used in <strong>examples</strong> or <strong>vignettes</strong></li>
 </ul>
@@ -362,6 +374,12 @@ install.packages(&quot;usethis&quot;)</pre>
 <p>but what if you did this instead? (Function masking)</p>
 
 <pre class = 'prettyprint lang-r'>usethis::use_package(&quot;dplyr&quot;, type = &quot;Depends&quot;)</pre>
+
+</article></slide><slide class=""><hgroup><h2>You Want the Pipe but not <code>dplyr</code></h2></hgroup><article  id="you-want-the-pipe-but-not-dplyr">
+
+<p>Add the pipe (<code>%&gt;%</code>) to a package</p>
+
+<pre class = 'prettyprint lang-r'>usethis::use_pipe()</pre>
 
 </article></slide><slide class=""><hgroup><h2>Creating a roxygen header</h2></hgroup><article  id="creating-a-roxygen-header">
 
@@ -515,10 +533,10 @@ install.packages(&quot;usethis&quot;)</pre>
 </article></slide><slide class=""><hgroup><h2>Importing Package Functions</h2></hgroup><article  id="importing-package-functions">
 
 <ul>
-<li>You only have to import a whole package or a package function, don’t mix and match</li>
-<li>You only have to import a function in <strong>one</strong> file.</li>
+<li><p>You only have to import a whole package or a package function, don’t mix and match</p></li>
+<li><p>You only have to import a function in <strong>one</strong> file.</p></li>
 <li><p>e.g put <code>@importFrom graphics hist</code> in any <code>.R</code> file.</p></li>
-<li>Any package you want to import, make sure you use <code>use_package</code>, so we’d use:</li>
+<li><p>Any package you want to import, make sure you use <code>use_package</code>, so we’d use:</p></li>
 </ul>
 
 <pre class = 'prettyprint lang-r'>usethis::use_package(&quot;graphics&quot;)</pre>
@@ -555,7 +573,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>Run <code>use_data_raw()</code> if you have code to generate data (R data):</p>
 
-<pre class = 'prettyprint lang-r'>usethis::use_data_raw()</pre>
+<pre class = 'prettyprint lang-r'>usethis::use_data_raw(&quot;mydata_set&quot;)</pre>
 
 <p>This will create a <code>data-raw</code> folder.</p>
 
@@ -572,7 +590,7 @@ install.packages(&quot;usethis&quot;)</pre>
 </article></slide><slide class=""><hgroup><h2>Documenting Data</h2></hgroup><article  id="documenting-data">
 
 <ul>
-<li>You don’t export data.</li>
+<li>You don’t need to put an <code>export</code> tag for data.</li>
 </ul>
 
 <pre >#&#39; My Awesome Data Set
@@ -596,6 +614,105 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>will return the filename for you to access it in code.</p>
 
+</article></slide><slide class=""><hgroup><h2>Passing arguments &ldquo;through&rdquo;</h2></hgroup><article  id="passing-arguments-through">
+
+<p>The ellipsis/dots <code>...</code> can pass arguments through to other methods:</p>
+
+<pre class = 'prettyprint lang-r'>#&#39; @param ... pass additional methods to [graphics::hist]
+top = function(x, n, ...) {
+  xx = x[1:n, 1:n]
+  hist(xx, ...)
+  print(xx)
+}</pre>
+
+</article></slide><slide class=""><hgroup><h2>Passing arguments &ldquo;through&rdquo;</h2></hgroup><article  id="passing-arguments-through-1">
+
+<pre class = 'prettyprint lang-r'>top(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)</pre>
+
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="720" /></p>
+
+<pre >            [,1]       [,2]       [,3]       [,4]       [,5]        [,6]
+[1,] -1.75673291  0.2443928  0.6253147 -0.5362452  1.8500967 -0.42196775
+[2,]  0.19614515 -0.1069800  2.5443131  0.4890368  0.8142388 -2.12629854
+[3,] -0.02367791 -1.0768249  0.3134811 -0.6421259 -0.8148540 -0.47561875
+[4,]  1.02625940  1.2452868  0.8509034  0.8336965  0.5617518 -0.90419435
+[5,]  0.51061887 -1.2992581  2.0231851 -0.3979581 -0.4837146  2.16560613
+[6,]  1.26152622 -0.7745933  0.9851347  0.1536890  0.3270455  0.08527583
+[7,] -0.56192852 -1.2280658 -1.0920070 -1.5653791 -1.0441837 -0.15208071
+[8,]  0.64330784  1.1158436  1.0535093 -0.4892987  0.1877092 -0.51703558
+             [,7]        [,8]
+[1,] -2.287744642 -0.09125479
+[2,]  0.445466083  0.41883771
+[3,] -1.398002811 -0.30441257
+[4,]  0.226139377 -0.18914525
+[5,]  0.637431529  0.16593924
+[6,]  0.525298996  0.86113569
+[7,] -0.002468162 -0.85960080
+[8,] -0.070624600  0.98552815</pre>
+
+</article></slide><slide class=""><hgroup><h2>Picking one option and Checking for input</h2></hgroup><article  id="picking-one-option-and-checking-for-input">
+
+<p><code>match.arg</code> will return <em>one</em> option form a set of them.</p>
+
+<pre class = 'prettyprint lang-r'>run_top_stat = function(x, n = 4, stat = c(&quot;mean&quot;, &quot;median&quot;, &quot;sd&quot;),  ...) {
+  stat = match.arg(stat)
+  print(stat)
+  if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
+    stop(&quot;n should be a number of length 1!&quot;)
+  }
+  top_x = top(x, n = n, ...)
+  func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
+                &quot;median&quot; = median, &quot;sd&quot; = sd)
+  return(func(top_x))
+  stop(&quot;this will never be executed!&quot;)
+}</pre>
+
+</article></slide><slide class=""><hgroup><h2>Picking one option</h2></hgroup><article  id="picking-one-option">
+
+<pre class = 'prettyprint lang-r'>run_top_stat(matrix(rnorm(100), nrow = 10), breaks = 20)</pre>
+
+<pre >[1] &quot;mean&quot;</pre>
+
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" width="720" /></p>
+
+<pre >           [,1]       [,2]       [,3]       [,4]
+[1,]  0.1336601  1.2157929  0.2525312 -1.5585462
+[2,]  0.2697537  0.6144354 -0.6957254  0.9068386
+[3,]  0.0706795  1.1980421 -0.1779556 -1.4861509
+[4,] -0.2922135 -0.9712526  0.3759598 -3.1457544</pre>
+
+<pre >[1] -0.2056191</pre>
+
+</article></slide><slide class=""><hgroup><h2>&ldquo;Printing&rdquo; Output and Checking for Input</h2></hgroup><article  id="printing-output-and-checking-for-input">
+
+<p><code>print</code> is fine when debugging, but use <code>message</code> and suppress option</p>
+
+<pre class = 'prettyprint lang-r'>run_top_stat = function(x, n = 4, 
+                        stat = c(&quot;mean&quot;, &quot;median&quot;, &quot;sd&quot;), verbose = TRUE, ...) {
+  stat = match.arg(stat)
+  if (verbose) {
+    message(paste0(&quot;Statistic is &quot;, stat))
+  }
+  if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
+    stop(&quot;n should be a number of length 1!&quot;)
+  }
+  top_x = top(x, n = n, ...)
+  func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
+                &quot;median&quot; = median, &quot;sd&quot; = sd)
+  return(func(top_x))
+}</pre>
+
+</article></slide><slide class=""><hgroup><h2>Optional arguments</h2></hgroup><article  id="optional-arguments">
+
+<p>Many times I will set something to <code>NULL</code> and then test to determine logic</p>
+
+<pre class = 'prettyprint lang-r'>gen_func = function(x, y = NULL) {
+  if (!is.null(y)) {
+    x = x * y
+  }
+  plot(x)
+}</pre>
+
 </article></slide><slide class=""><hgroup><h2>Unit Tests</h2></hgroup><article  id="unit-tests">
 
 <p>Unit testing packages: <code>testthat</code> and <code>RUnit</code>.</p>
@@ -604,8 +721,10 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <pre class = 'prettyprint lang-r'>testthat::test_that(&quot;Description of test&quot;, { 
 # code for test
+r = 3.5523334
+df = data.frame(r = r)
 testthat::expect_equal(r, 3.5523334)
-testthat::expect_true(x)
+testthat::expect_true(r &gt; 3)
 testthat::expect_is(my_df, &quot;data.frame&quot;)
 })</pre>
 
@@ -682,7 +801,7 @@ vignette: &gt;
 <li>Integrate with GitHub, each push tested</li>
 </ul>
 
-<pre class = 'prettyprint lang-r'>usethis::use_git()
+<pre class = 'prettyprint lang-r'>usethis::use_git() # done if using devtools
 usethis::use_github() # must have GITHUB_PAT set up
 usethis::use_appveyor()
 usethis::use_travis()</pre>
@@ -771,12 +890,6 @@ rm(list = &quot;col5&quot;) # remove it </pre>
 <li>Use <code>testthat::skip_on_cran()</code> for skipping CRAN tests</li>
 <li><code>testthat::skip_on_travis()</code> and <code>testthat::skip_on_appveyor()</code> for CI</li>
 </ul>
-
-</article></slide><slide class=""><hgroup><h2>You Want the Pipe but not <code>dplyr</code></h2></hgroup><article  id="you-want-the-pipe-but-not-dplyr">
-
-<p>Run</p>
-
-<pre class = 'prettyprint lang-r'>usethis::use_pipe()</pre>
 
 </article></slide><slide class=""><hgroup><h2>Making a Logo/Hex Sticker</h2></hgroup><article  id="making-a-logohex-sticker">
 

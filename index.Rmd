@@ -22,7 +22,7 @@ article {
 </style>
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, comment = "")
 ```
 
 
@@ -62,14 +62,15 @@ Package Names:
 
 ## What's in a Name?
 
-If you have a package name in mind before you start, use the `available` package:
+Use `available` pkg to see if name taken:
 
 ```{r, eval = FALSE}
 install.packages("available")
-available::available("packageName")
+```
+```{r, eval = TRUE, cache=TRUE}
+available::available("enar", browse = FALSE) # if want "enar"
 ```
 
-Checks CRAN/Bioconductor/GitHub for potentially similar package names.
 
 ## Starting Up
 
@@ -82,7 +83,7 @@ install.packages("devtools")
 install.packages("usethis")
 ```
 
-In RStudio, File -> New Project -> New Directory -> R Package using devtools (scroll down).
+In RStudio, File -> New Project -> New Directory -> R Package using devtools (scroll down).  Let's call it `enar2020`.
 
 ## Trying our first build
 
@@ -99,7 +100,7 @@ This checks our package.
 
 Go to Build -> Configure Build Tools
 
-Add `--as-cran` to "Check Package" (may not be necessary anymore)
+Can add options to "Check Package" (like `--as-cran`)
 
 <img src="r_packages_figures/build_tools.png" style="width: 45%; display: block; margin: auto;">
 
@@ -168,7 +169,7 @@ Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 
   - packages with functions we need **in code**
 - **Depends:** package3, package5
   - **ALL** functions loaded from package, but **loaded in user library** before your package
-  - Similar to `library(package3); library(yourpackage)` - not recommended
+  - Similar to `library(package3); library(yourpackage)` - *not recommended*
 - **Suggests:** package4, package6: used in **examples** or **vignettes**
 
 ## DESCRIPTION: not so fun default
@@ -260,6 +261,15 @@ but what if you did this instead?  (Function masking)
 ```{r, eval=FALSE}
 usethis::use_package("dplyr", type = "Depends")
 ```
+
+
+## You Want the Pipe but not `dplyr`
+
+Add the pipe (`%>%`) to a package
+```r
+usethis::use_pipe()
+```
+
 
 ## Creating a roxygen header
 
@@ -423,6 +433,8 @@ Add `@importFrom graphics hist` to your `top.R` file (anywhere in the header)
     - Rerunning may get rid of these
 - Then try `Build → Check Package`
 
+
+
 ## Troubleshooting
 
 In case things are not working or seem off 
@@ -442,7 +454,7 @@ at the top and rerun.
 Run `use_data_raw()` if you have code to generate data (R data):
 
 ```{r}
-usethis::use_data_raw()
+usethis::use_data_raw("mydata_set")
 ```
 
 This will create a `data-raw` folder.
@@ -460,7 +472,7 @@ And this will make a `data/mydata_set.rda` file.
 
 ## Documenting Data
 
-- You don't export data.
+- You don't need to put an `export` tag for data.
 
 ```
 #' My Awesome Data Set
@@ -487,6 +499,84 @@ system.file("extdata", "myimage.nii.gz", package = "YOUR_PACKAGE_NAME")
 
 will return the filename for you to access it in code.
 
+## Passing arguments "through" 
+
+The ellipsis/dots `...` can pass arguments through to other methods:
+
+```{r eval = TRUE}
+#' @param ... pass additional methods to [graphics::hist]
+top = function(x, n, ...) {
+  xx = x[1:n, 1:n]
+  hist(xx, ...)
+  print(xx)
+}
+```
+
+## Passing arguments "through" 
+
+```{r, eval = TRUE}
+top(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)
+```
+
+## Picking one option  and Checking for input
+
+`match.arg` will return *one* option form a set of them.
+
+```{r eval = TRUE}
+run_top_stat = function(x, n = 4, stat = c("mean", "median", "sd"),  ...) {
+  stat = match.arg(stat)
+  print(stat)
+  if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
+    stop("n should be a number of length 1!")
+  }
+  top_x = top(x, n = n, ...)
+  func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
+                "median" = median, "sd" = sd)
+  return(func(top_x))
+  stop("this will never be executed!")
+}
+```
+
+## Picking one option
+
+```{r, eval = TRUE}
+run_top_stat(matrix(rnorm(100), nrow = 10), breaks = 20)
+```
+
+## "Printing" Output and Checking for Input
+
+`print` is fine when debugging, but use `message` and suppress option
+
+```{r eval = TRUE}
+run_top_stat = function(x, n = 4, 
+                        stat = c("mean", "median", "sd"), verbose = TRUE, ...) {
+  stat = match.arg(stat)
+  if (verbose) {
+    message(paste0("Statistic is ", stat))
+  }
+  if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
+    stop("n should be a number of length 1!")
+  }
+  top_x = top(x, n = n, ...)
+  func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
+                "median" = median, "sd" = sd)
+  return(func(top_x))
+}
+```
+
+## Optional arguments
+
+Many times I will set something to `NULL` and then test to determine logic
+
+```{r eval = FALSE}
+gen_func = function(x, y = NULL) {
+  if (!is.null(y)) {
+    x = x * y
+  }
+  plot(x)
+}
+```
+
 ## Unit Tests
 
 Unit testing packages: `testthat` and `RUnit`.
@@ -496,8 +586,10 @@ To use `testthat`, run `usethis::use_testthat()`.  All test files must be in `te
 ```r
 testthat::test_that("Description of test", { 
 # code for test
+r = 3.5523334
+df = data.frame(r = r)
 testthat::expect_equal(r, 3.5523334)
-testthat::expect_true(x)
+testthat::expect_true(r > 3)
 testthat::expect_is(my_df, "data.frame")
 })
 ```
@@ -583,7 +675,7 @@ package 0.2.0
 - Integrate with GitHub, each push tested
 
 ```r
-`r pkg_name`::use_git()
+`r pkg_name`::use_git() # done if using devtools
 `r pkg_name`::use_github() # must have GITHUB_PAT set up
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
@@ -661,13 +753,6 @@ This will remove it but not be a "global" fix.  Also, make sure `col5` is **not*
 
 - Use `testthat::skip_on_cran()` for skipping CRAN tests
 - `testthat::skip_on_travis()` and `testthat::skip_on_appveyor()` for CI
-
-## You Want the Pipe but not `dplyr`
-
-Run 
-```r
-usethis::use_pipe()
-```
 
 ## Making a Logo/Hex Sticker
 
