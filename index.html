@@ -139,7 +139,7 @@ article {
 
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>What are R Packages?</h2></hgroup><article  id="what-are-r-packages">
 
-</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  class="build" id="r-packages">
+</article></slide><slide class=""><hgroup><h2>R Packages</h2></hgroup><article  id="r-packages" class="build">
 
 <ol class = 'build'>
 <li>Sets of Functions</li>
@@ -357,7 +357,7 @@ usethis::use_mit_license()</pre>
 
 <p>Save this to <code>top.R</code> file in <code>R/</code> (where R functions are). Delete <code>hello.R</code> file if present.</p>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Function names should likely be verbs</h2></hgroup><article  id="function-names-should-likely-be-verbs">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Function names should likely be verbs, though (e.g. <code>get_top</code>)</h2></hgroup><article  id="function-names-should-likely-be-verbs-though-e.g.-get_top">
 
 </article></slide><slide class=""><hgroup><h2>Adding a package to DESCRIPTION field</h2></hgroup><article  id="adding-a-package-to-description-field">
 
@@ -374,6 +374,18 @@ usethis::use_mit_license()</pre>
 <p>Add the pipe (<code>%&gt;%</code>) to a package</p>
 
 <pre class = 'prettyprint lang-r'>usethis::use_pipe()</pre>
+
+<pre >#&#39; Pipe operator
+#&#39;
+#&#39; See \code{magrittr::\link[magrittr:pipe]{\%&gt;\%}} for details.
+#&#39;
+#&#39; @name %&gt;%
+#&#39; @rdname pipe
+#&#39; @keywords internal
+#&#39; @export
+#&#39; @importFrom magrittr %&gt;%
+#&#39; @usage lhs \%&gt;\% rhs
+NULL</pre>
 
 </article></slide><slide class=""><hgroup><h2>Creating a roxygen header</h2></hgroup><article  id="creating-a-roxygen-header">
 
@@ -612,8 +624,10 @@ usethis::use_mit_license()</pre>
 
 <p>The ellipsis/dots <code>...</code> can pass arguments through to other methods:</p>
 
-<pre class = 'prettyprint lang-r'>#&#39; @param ... pass additional methods to [graphics::hist]
-top = function(x, n, ...) {
+<pre class = 'prettyprint lang-r'>#&#39; @rdname top
+#&#39; @export 
+#&#39; @param ... pass additional methods to [graphics::hist]
+top_with_dots = function(x, n, ...) {
   xx = x[1:n, 1:n]
   hist(xx, ...)
   print(xx)
@@ -621,28 +635,28 @@ top = function(x, n, ...) {
 
 </article></slide><slide class=""><hgroup><h2>Passing arguments &ldquo;through&rdquo;</h2></hgroup><article  id="passing-arguments-through-1">
 
-<pre class = 'prettyprint lang-r'>top(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)</pre>
+<pre class = 'prettyprint lang-r'>top_with_dots(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)</pre>
 
 <p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="720" /></p>
 
-<pre >           [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
-[1,]  0.2192292  0.9406347  1.5206589 -0.2999760  0.80144886  0.1289643
-[2,]  1.7079653  0.4376512  0.7530701  1.2644699  0.93196859  1.9070886
-[3,] -1.0384861 -0.9522370 -0.9308497  1.5941830 -0.71431062  1.4433517
-[4,]  0.3610628 -0.5285194  1.3886855 -1.8142617  0.05181826  0.3150678
-[5,]  1.5174793  0.1528741 -0.3094510  0.4758910  1.08231808 -1.3044199
-[6,]  0.3912001  0.3133300 -0.7130574 -0.4324381 -1.42667867 -1.7189113
-[7,] -1.1065394  0.9858787  1.0235840  0.1158156 -1.91562088  0.7533922
-[8,] -0.4599813 -0.7958871  0.9841577  0.9617492 -1.89092973 -1.8355250
-            [,7]       [,8]
-[1,]  0.19661864  0.1383780
-[2,] -0.09663403 -0.8391125
-[3,] -0.46054871 -2.4922486
-[4,]  0.44094616 -0.5330493
-[5,] -0.14247656 -0.3285502
-[6,] -0.56807240 -0.7586985
-[7,]  0.72022027 -0.8201074
-[8,]  0.56190005  0.1649808</pre>
+<pre >           [,1]        [,2]        [,3]       [,4]       [,5]       [,6]
+[1,]  0.7140816 -0.55565617 -1.32202304  2.4737886  0.1831091 -0.6760668
+[2,]  0.4292299  0.20055260 -0.77719650  0.7020308 -1.4139069 -0.8714099
+[3,] -1.2052500 -0.03326426 -0.35718281  1.3560201  0.1312547 -0.1746154
+[4,]  1.3006658  1.33594740 -0.83252246 -0.4916309 -1.0203735  0.7670795
+[5,]  0.3633291 -0.81760815  0.72865442  2.1539698 -1.1005687 -0.9714571
+[6,] -0.7454008 -0.95806171  0.10566795 -0.4282773 -0.9090058 -1.5229573
+[7,] -0.4614851  0.11205088  0.04211314  0.5394770  0.3860292  1.3732152
+[8,] -1.1603486 -0.81075380 -1.17779355  0.2617205 -1.9127061  0.9629079
+           [,7]        [,8]
+[1,] -2.1793847 -1.41739071
+[2,] -0.1986075  0.43993983
+[3,]  0.5537047 -1.06737974
+[4,]  1.4938638  0.43359731
+[5,]  0.6636340 -0.32114394
+[6,] -0.7923948 -1.76354800
+[7,]  0.8254306  0.03894572
+[8,] -1.3157846 -0.50421702</pre>
 
 </article></slide><slide class=""><hgroup><h2>Picking one option and Checking for input</h2></hgroup><article  id="picking-one-option-and-checking-for-input">
 
@@ -654,7 +668,7 @@ top = function(x, n, ...) {
   if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
     stop(&quot;n should be a number of length 1!&quot;)
   }
-  top_x = top(x, n = n, ...)
+  top_x = top_with_dots(x, n = n, ...)
   func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
                 &quot;median&quot; = median, &quot;sd&quot; = sd)
   return(func(top_x))
@@ -669,13 +683,13 @@ top = function(x, n, ...) {
 
 <p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="720" /></p>
 
-<pre >           [,1]      [,2]        [,3]       [,4]
-[1,]  1.9010668 1.1673998 0.048793464  0.3971798
-[2,] -1.4016426 0.2030129 0.737208974 -0.5524079
-[3,]  0.6350658 1.2976467 0.584080456  0.2464264
-[4,]  0.1024248 0.6808001 0.004561645  2.6169431</pre>
+<pre >           [,1]       [,2]      [,3]       [,4]
+[1,] 0.01923548 -0.1656327 -2.684081 -0.1670431
+[2,] 0.29380011  0.7424873 -1.464115 -1.3160647
+[3,] 0.48887402 -0.6360692  1.286316 -1.3546858
+[4,] 0.04972810  0.1160757 -1.856003 -2.0356753</pre>
 
-<pre >[1] 0.541785</pre>
+<pre >[1] -0.5426783</pre>
 
 </article></slide><slide class=""><hgroup><h2>&ldquo;Printing&rdquo; Output and Checking for Input</h2></hgroup><article  id="printing-output-and-checking-for-input">
 

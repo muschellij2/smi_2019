@@ -251,7 +251,7 @@ top = function(x, n) {
 
 Save this to `top.R` file in `R/` (where R functions are).  Delete `hello.R` file if present.
 
-# Function names should likely be verbs
+# Function names should likely be verbs, though (e.g. `get_top`)
 
 ## Adding a package to DESCRIPTION field
 
@@ -273,6 +273,19 @@ usethis::use_package("dplyr", type = "Depends")
 Add the pipe (`%>%`) to a package
 ```r
 usethis::use_pipe()
+```
+```
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL
 ```
 
 
@@ -509,8 +522,10 @@ will return the filename for you to access it in code.
 The ellipsis/dots `...` can pass arguments through to other methods:
 
 ```{r eval = TRUE}
+#' @rdname top
+#' @export 
 #' @param ... pass additional methods to [graphics::hist]
-top = function(x, n, ...) {
+top_with_dots = function(x, n, ...) {
   xx = x[1:n, 1:n]
   hist(xx, ...)
   print(xx)
@@ -520,7 +535,7 @@ top = function(x, n, ...) {
 ## Passing arguments "through" 
 
 ```{r, eval = TRUE}
-top(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)
+top_with_dots(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)
 ```
 
 ## Picking one option  and Checking for input
@@ -534,7 +549,7 @@ run_top_stat = function(x, n = 4, stat = c("mean", "median", "sd"),  ...) {
   if (!assertthat::is.number(n)) { # make sure n is just one value and numeric
     stop("n should be a number of length 1!")
   }
-  top_x = top(x, n = n, ...)
+  top_x = top_with_dots(x, n = n, ...)
   func = switch(stat, mean = function(x) mean(x, na.rm = TRUE),
                 "median" = median, "sd" = sd)
   return(func(top_x))
