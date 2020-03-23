@@ -556,6 +556,9 @@ run_top_stat = function(x, n = 4, stat = c("mean", "median", "sd"),  ...) {
   stop("this will never be executed!")
 }
 ```
+<div style="font-size:20pt">
+R run `usethis::use_package("assertthat", "Imports")` as we are now using `assertthat` package.
+</div>
 
 ## Picking one option
 
