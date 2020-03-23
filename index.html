@@ -194,12 +194,11 @@ Sentiment:???</pre>
 <li>This will use <a href='https://github.com/' title=''>GitHub</a> for packages, sign up for an account if you don’t have one.</li>
 </ul>
 
-<p>Use RStudio and the <code>devtools</code> and <code>usethis</code> packages. It’s easier.</p>
+<p>We’ll be using <code>devtools</code>, <code>usethis</code>, and others, install:</p>
 
-<pre class = 'prettyprint lang-r'>install.packages(&quot;devtools&quot;)
-install.packages(&quot;usethis&quot;)</pre>
+<pre class = 'prettyprint lang-r'>install.packages(c(&quot;devtools&quot;, &quot;usethis&quot;))</pre>
 
-<p>In RStudio, File -&gt; New Project -&gt; New Directory -&gt; R Package using devtools (scroll down). Let’s call it <code>enar2020</code>.</p>
+<p>In RStudio, File → New Project → New Directory → R Package using devtools (scroll down). Let’s call it <code>enar2020</code>.</p>
 
 </article></slide><slide class=""><hgroup><h2>Trying our first build</h2></hgroup><article  id="trying-our-first-build">
 
@@ -221,9 +220,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Setting Up: Documentation</h2></hgroup><article  id="setting-up-documentation">
 
-<p>In RStudio, click <code>Build → Configure Build Tools → Generate Documentation with Roxygen</code>. If that is gray, install <code>roxygen2</code>.</p>
-
-<pre class = 'prettyprint lang-r'>install.packages(&quot;roxygen2&quot;)</pre>
+<p>In RStudio, click <code>Build → Configure Build Tools → Generate Documentation with Roxygen</code>. If that is gray, install <code>roxygen2</code> (<code>install.packages(&quot;roxygen2&quot;)</code>) .</p>
 
 <p><img src="r_packages_figures/roxygen.png" style="width: 45%; display: block; margin: auto;"></p>
 
@@ -257,6 +254,8 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <pre class = 'prettyprint lang-yaml'>Title: How to Analyze Data and Images</pre>
 
+<pre class = 'prettyprint lang-yaml'>Title: Analyze Data from &#39;ENAR&#39; </pre>
+
 <ul>
 <li>do <strong>not</strong> start with R package or Package</li>
 </ul>
@@ -269,11 +268,11 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>Use DOIs if you can (<code>&lt;doi...&gt;</code>). If you go too long on a line, indent it with 4 spaces and go to the next.</p>
 
-<ul>
-<li>Look at some of favorite package descriptions</li>
-</ul>
+<pre class = 'prettyprint lang-yaml'>Description: Provides tools for &#39;ENAR&#39; 2020 meeting
+    &lt;https://enar.org/meetings/spring2020/&gt;.  Provides slides for R 
+    package development.</pre>
 
-</article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  class="build" id="description-additional-fields">
+</article></slide><slide class=""><hgroup><h2>DESCRIPTION: additional fields</h2></hgroup><article  id="description-additional-fields">
 
 <ul>
 <li><strong>Imports:</strong> package1, package2
@@ -281,11 +280,11 @@ install.packages(&quot;usethis&quot;)</pre>
 <ul>
 <li>packages with functions we need <strong>in code</strong></li>
 </ul></li>
-<li><strong>Depends:</strong> package3, package5
+<li><strong>Depends:</strong> <code>dplyr</code>, <code>enar2020</code>
 
 <ul>
 <li><strong>ALL</strong> functions loaded from package, but <strong>loaded in user library</strong> before your package</li>
-<li>Similar to <code>library(package3); library(yourpackage)</code> - <em>not recommended</em></li>
+<li>Similar to <code>library(dplyr); library(</code> <code>enar2020</code> <code>)</code> - <em>not recommended</em></li>
 </ul></li>
 <li><strong>Suggests:</strong> package4, package6: used in <strong>examples</strong> or <strong>vignettes</strong></li>
 </ul>
@@ -294,7 +293,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <p>In the RStudio build, it may add something like:</p>
 
-<pre class = 'prettyprint lang-bash'>Depends: R (&gt;= 3.5.3)</pre>
+<pre class = 'prettyprint lang-bash'>Depends: R (&gt;= 3.6.2)</pre>
 
 <p>This is not great because anyone with a lower <code>R</code> version (like <code>3.4</code>) cannot install your package. Unless you need the newest <code>R</code> functionality, delete this line.</p>
 
@@ -324,7 +323,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 <div id="right_col">
 
-<img src="figure/highlander.gif" style="width:120%; margin: auto;" alt="flow">
+<img src="figure/highlander.gif" style="width:110%; margin: auto;" alt="flow">
 
 <div>
 
@@ -337,15 +336,10 @@ install.packages(&quot;usethis&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>License</h2></hgroup><article  id="license">
 
-<p>I use <code>License: GPL-3</code> or <code>GPL-2</code>.</p>
+<p>I use <code>License: GPL-3</code> or <code>GPL-2</code> See <a href='https://www.r-project.org/Licenses/' title=''>https://www.r-project.org/Licenses/</a>.</p>
 
-<ul>
-<li>For GPL-3:</li>
-</ul>
-
-<pre class = 'prettyprint lang-r'>usethis::use_gpl3_license()</pre>
-
-<p><a href='https://www.r-project.org/Licenses/' title=''>https://www.r-project.org/Licenses/</a></p>
+<pre class = 'prettyprint lang-r'>usethis::use_gpl3_license()
+usethis::use_mit_license()</pre>
 
 <p><a href='https://kbroman.org/pkg_primer/pages/licenses.html' title=''>https://kbroman.org/pkg_primer/pages/licenses.html</a></p>
 
@@ -353,7 +347,7 @@ install.packages(&quot;usethis&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Roxygen2</h2></hgroup><article  id="roxygen2">
 
-<p>Roxygen allows for functions and documentation in the same file. Let’s make a function:</p>
+<p>Roxygen allows for functions and documentation in the same file. Copy/Paste or <a href='./top.R' title=''>Downlaod here</a>.</p>
 
 <pre class = 'prettyprint lang-r'>top = function(x, n) {
   xx = x[1:n, 1:n]
@@ -629,26 +623,26 @@ top = function(x, n, ...) {
 
 <pre class = 'prettyprint lang-r'>top(matrix(rnorm(100), nrow = 10), n = 8, breaks = 20)</pre>
 
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="720" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="720" /></p>
 
-<pre >            [,1]       [,2]       [,3]       [,4]       [,5]        [,6]
-[1,] -1.75673291  0.2443928  0.6253147 -0.5362452  1.8500967 -0.42196775
-[2,]  0.19614515 -0.1069800  2.5443131  0.4890368  0.8142388 -2.12629854
-[3,] -0.02367791 -1.0768249  0.3134811 -0.6421259 -0.8148540 -0.47561875
-[4,]  1.02625940  1.2452868  0.8509034  0.8336965  0.5617518 -0.90419435
-[5,]  0.51061887 -1.2992581  2.0231851 -0.3979581 -0.4837146  2.16560613
-[6,]  1.26152622 -0.7745933  0.9851347  0.1536890  0.3270455  0.08527583
-[7,] -0.56192852 -1.2280658 -1.0920070 -1.5653791 -1.0441837 -0.15208071
-[8,]  0.64330784  1.1158436  1.0535093 -0.4892987  0.1877092 -0.51703558
-             [,7]        [,8]
-[1,] -2.287744642 -0.09125479
-[2,]  0.445466083  0.41883771
-[3,] -1.398002811 -0.30441257
-[4,]  0.226139377 -0.18914525
-[5,]  0.637431529  0.16593924
-[6,]  0.525298996  0.86113569
-[7,] -0.002468162 -0.85960080
-[8,] -0.070624600  0.98552815</pre>
+<pre >           [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
+[1,]  0.2192292  0.9406347  1.5206589 -0.2999760  0.80144886  0.1289643
+[2,]  1.7079653  0.4376512  0.7530701  1.2644699  0.93196859  1.9070886
+[3,] -1.0384861 -0.9522370 -0.9308497  1.5941830 -0.71431062  1.4433517
+[4,]  0.3610628 -0.5285194  1.3886855 -1.8142617  0.05181826  0.3150678
+[5,]  1.5174793  0.1528741 -0.3094510  0.4758910  1.08231808 -1.3044199
+[6,]  0.3912001  0.3133300 -0.7130574 -0.4324381 -1.42667867 -1.7189113
+[7,] -1.1065394  0.9858787  1.0235840  0.1158156 -1.91562088  0.7533922
+[8,] -0.4599813 -0.7958871  0.9841577  0.9617492 -1.89092973 -1.8355250
+            [,7]       [,8]
+[1,]  0.19661864  0.1383780
+[2,] -0.09663403 -0.8391125
+[3,] -0.46054871 -2.4922486
+[4,]  0.44094616 -0.5330493
+[5,] -0.14247656 -0.3285502
+[6,] -0.56807240 -0.7586985
+[7,]  0.72022027 -0.8201074
+[8,]  0.56190005  0.1649808</pre>
 
 </article></slide><slide class=""><hgroup><h2>Picking one option and Checking for input</h2></hgroup><article  id="picking-one-option-and-checking-for-input">
 
@@ -673,15 +667,15 @@ top = function(x, n, ...) {
 
 <pre >[1] &quot;mean&quot;</pre>
 
-<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" width="720" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="720" /></p>
 
-<pre >           [,1]       [,2]       [,3]       [,4]
-[1,]  0.1336601  1.2157929  0.2525312 -1.5585462
-[2,]  0.2697537  0.6144354 -0.6957254  0.9068386
-[3,]  0.0706795  1.1980421 -0.1779556 -1.4861509
-[4,] -0.2922135 -0.9712526  0.3759598 -3.1457544</pre>
+<pre >           [,1]      [,2]        [,3]       [,4]
+[1,]  1.9010668 1.1673998 0.048793464  0.3971798
+[2,] -1.4016426 0.2030129 0.737208974 -0.5524079
+[3,]  0.6350658 1.2976467 0.584080456  0.2464264
+[4,]  0.1024248 0.6808001 0.004561645  2.6169431</pre>
 
-<pre >[1] -0.2056191</pre>
+<pre >[1] 0.541785</pre>
 
 </article></slide><slide class=""><hgroup><h2>&ldquo;Printing&rdquo; Output and Checking for Input</h2></hgroup><article  id="printing-output-and-checking-for-input">
 
@@ -720,12 +714,13 @@ top = function(x, n, ...) {
 <p>To use <code>testthat</code>, run <code>usethis::use_testthat()</code>. All test files must be in <code>testthat/tests/</code> and must start with the word <code>test</code>.</p>
 
 <pre class = 'prettyprint lang-r'>testthat::test_that(&quot;Description of test&quot;, { 
-# code for test
-r = 3.5523334
-df = data.frame(r = r)
-testthat::expect_equal(r, 3.5523334)
-testthat::expect_true(r &gt; 3)
-testthat::expect_is(my_df, &quot;data.frame&quot;)
+  # code for test
+  r = 3.5523334
+  df = data.frame(r = r)
+  testthat::expect_equal(r, 3.5523334)
+  testthat::expect_true(r &gt; 3)
+  testthat::expect_error(r + &quot;hey&quot;)
+  testthat::expect_is(df, &quot;data.frame&quot;)
 })</pre>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Good Rule of Thumb: Any issue created/bug found gets a test</h2></hgroup><article  id="good-rule-of-thumb-any-issue-createdbug-found-gets-a-test">
@@ -756,7 +751,7 @@ vignette: &gt;
   %\VignetteEncoding{UTF-8}
 ---</pre>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>95% of what you will be doing is now covered. Mostly it will be documenting and examples</h2></hgroup><article  id="of-what-you-will-be-doing-is-now-covered.-mostly-it-will-be-documenting-and-examples">
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>95% of what you will be need. Mostly it will be documenting and examples</h2></hgroup><article  id="of-what-you-will-be-need.-mostly-it-will-be-documenting-and-examples">
 
 </article></slide><slide class=""><hgroup><h2>Creating a README</h2></hgroup><article  id="creating-a-readme">
 

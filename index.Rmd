@@ -22,7 +22,9 @@ article {
 </style>
 
 ```{r setup, include=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE, comment = "")
+package_name = "enar2020"
 ```
 
 
@@ -50,6 +52,7 @@ https://cran.r-project.org/doc/manuals/r-release/R-exts.html
 knitr::include_graphics("figure/writing_r_extensions.png")
 ```
 
+
 ## What's in a Name?
 
 Package Names:
@@ -76,14 +79,13 @@ available::available("enar", browse = FALSE) # if want "enar"
 
 - This will use [GitHub](https://github.com/) for packages, sign up for an account if you don't have one.
 
-Use RStudio and the `devtools` and `usethis` packages.  It's easier.
+We'll be using `devtools`, `usethis`, and others, install:
 
 ```{r, eval = FALSE}
-install.packages("devtools")
-install.packages("usethis")
+install.packages(c("devtools", "usethis"))
 ```
 
-In RStudio, File -> New Project -> New Directory -> R Package using devtools (scroll down).  Let's call it `enar2020`.
+In RStudio, File → New Project → New Directory → R Package using devtools (scroll down).  Let's call it `` `r package_name` ``.
 
 ## Trying our first build
 
@@ -106,11 +108,7 @@ Can add options to "Check Package" (like `--as-cran`)
 
 ## Setting Up: Documentation
 
-In RStudio, click `Build → Configure Build Tools → Generate Documentation with Roxygen`. If that is gray, install `roxygen2`.  
-
-```{r, eval = FALSE}
-install.packages("roxygen2")
-```
+In RStudio, click `Build → Configure Build Tools → Generate Documentation with Roxygen`. If that is gray, install `roxygen2` (`install.packages("roxygen2")`) .
 
 <img src="r_packages_figures/roxygen.png" style="width: 45%; display: block; margin: auto;">
 
@@ -149,6 +147,10 @@ Change the `Title` so that it's Title Case and make sure to put single quotes ar
 Title: How to Analyze Data and Images
 ```
 
+```yaml
+Title: Analyze Data from 'ENAR' 
+```
+
 - do **not** start with R package or Package
 
 
@@ -160,16 +162,20 @@ Also I keep putting single quotes around weird words (like science-specific).  M
 
 Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 4 spaces and go to the next.
 
-- Look at some of favorite package descriptions
+```yaml
+Description: Provides tools for 'ENAR' 2020 meeting
+    <https://enar.org/meetings/spring2020/>.  Provides slides for R 
+    package development.
+```
 
 
-## DESCRIPTION: additional fields {.build}
+## DESCRIPTION: additional fields 
 
 - **Imports:** package1, package2
   - packages with functions we need **in code**
-- **Depends:** package3, package5
+- **Depends:** `dplyr`, `` `r package_name` ``
   - **ALL** functions loaded from package, but **loaded in user library** before your package
-  - Similar to `library(package3); library(yourpackage)` - *not recommended*
+  - Similar to `library(dplyr); library(` `` `r package_name` `` `)` - *not recommended*
 - **Suggests:** package4, package6: used in **examples** or **vignettes**
 
 ## DESCRIPTION: not so fun default
@@ -177,7 +183,7 @@ Use DOIs if you can (`<doi...>`).  If you go too long on a line, indent it with 
 In the RStudio build, it may add something like:
 
 ```{r, engine="bash", eval = FALSE}
-Depends: R (>= 3.5.3)
+Depends: R (>= 3.6.2)
 ```
 
 This is not great because anyone with a lower `R` version (like `3.4`) cannot install your package.  Unless you need the newest `R` functionality, delete this line.
@@ -205,7 +211,7 @@ Roles, see `?person`
 - `aut` = author, can have multiple
 </div>
 <div id="right_col"> 
-<img src="figure/highlander.gif" style="width:120%; margin: auto;" alt="flow"> 
+<img src="figure/highlander.gif" style="width:110%; margin: auto;" alt="flow"> 
 <div>
 
 ## Maintainer
@@ -219,14 +225,12 @@ Maintainer: John Muschelli <muschellij2@gmail.com>
 
 ## License
 
-I use `License: GPL-3` or `GPL-2`.
+I use `License: GPL-3` or `GPL-2` See https://www.r-project.org/Licenses/.
 
-- For GPL-3:
 ```r
 `r pkg_name`::use_gpl3_license()
+`r pkg_name`::use_mit_license()
 ```
-
-https://www.r-project.org/Licenses/
 
 https://kbroman.org/pkg_primer/pages/licenses.html
 
@@ -234,7 +238,8 @@ https://kbroman.org/pkg_primer/pages/licenses.html
 
 ## Roxygen2
 
-Roxygen allows for functions and documentation in the same file. Let's make a function:
+Roxygen allows for functions and documentation in the same file. 
+Copy/Paste or [Downlaod here](./top.R). 
 
 ```{r eval = FALSE}
 top = function(x, n) {
@@ -583,14 +588,15 @@ Unit testing packages: `testthat` and `RUnit`.
 
 To use `testthat`, run `usethis::use_testthat()`.  All test files must be in `testthat/tests/` and must start with the word `test`.
 
-```r
+```{r, eval = TRUE}
 testthat::test_that("Description of test", { 
-# code for test
-r = 3.5523334
-df = data.frame(r = r)
-testthat::expect_equal(r, 3.5523334)
-testthat::expect_true(r > 3)
-testthat::expect_is(my_df, "data.frame")
+  # code for test
+  r = 3.5523334
+  df = data.frame(r = r)
+  testthat::expect_equal(r, 3.5523334)
+  testthat::expect_true(r > 3)
+  testthat::expect_error(r + "hey")
+  testthat::expect_is(df, "data.frame")
 })
 ```
 
@@ -623,8 +629,7 @@ vignette: >
 ---
 ```
 
-# 95% of what you will be doing is now covered.  Mostly it will be documenting and examples
-
+# 95% of what you will be need.  Mostly it will be documenting and examples
 
 ## Creating a README
 
@@ -667,6 +672,8 @@ package 0.2.0
 - Fixed bug in `bad_function` (fixes issue #52).
 ```
 
+
+
 # Continuous Integration
 
 ## Continuous Integration: Testing on the Cloud
@@ -680,6 +687,7 @@ package 0.2.0
 `r pkg_name`::use_appveyor()
 `r pkg_name`::use_travis()
 ```
+
 
 ## `appveyor.yml`
 
