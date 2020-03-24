@@ -1,6 +1,6 @@
 ---
 title: "Building R Packages"
-author: "John Muschelli, slides at http://johnmuschelli.com/smi_2019"
+author: "John Muschelli, slides at http://johnmuschelli.com/ENAR_2020.html"
 logo: bloomberg.logo.small.horizontal.blue.png
 output:
   ioslides_presentation:
